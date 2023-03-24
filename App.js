@@ -1,87 +1,82 @@
-import React, { Component, useState } from 'react';
-import { Text, TextInput, View, Button, Alert } from 'react-native';
-import DisplayContacts from './components/DisplayContacts';
-import DisplayProfile from './components/DisplayProfile';
-import LoginForm from './components/LoginForm';
-import SignUpForm from './components/SignUpForm';
-import ViewAllChats from './components/ViewAllChats';
-import ViewBlockedUsers from './components/ViewBlockedUsers';
-import ViewChatInfo from './components/ViewChatInfo';
-import ViewSingleChat from './components/ViewSingleChat';
-import validator from 'email-validator';
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignUp from "./screens/signUp";
+import Login from "./screens/login";
 
 
 
-class App extends Component {
-  constructor(props){
-    super(props);
-
-    this.state = {
-      email:'',
-      password:'',
-      errorText: '',
-    }
-
-  }
-
-
-  login = () => {
-    Alert.alert('Email: ' + this.state.email, 'Password: ' + this.state.password);
-
-
-    //Check email and password validity
-    if(!this.checkEmail(this.state.email)){
-      this.setState({errorText:'Email in wrong format'});
-      return;
-    }
-    if(!this.checkPassword(this.state.password)){
-      this.setState({errorText:'Password in wrong format'});
-      return;
-    }
-    this.setState({errorText: 'No Errors for now!'});
-  }
-
-  checkEmail = (email) => {
-    //Email check logic
-    return validator.validate(email); 
-  }
-
-  checkPassword = (password) => {
-    //Password check logic
-    const PASSWORD_REGEX = new RegExp('^(?=.*[A-Z])(?=.*[1@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,30}$');
-    //console.log(PASSWORD_REGEX.test(password));
-    return PASSWORD_REGEX.test(password);
-  }
-
-  render() {
-    return (
-      <View style={{
-        flex:1,
-        justifyContent: 'center'
-      }}>
-        <TextInput onChangeText={(text)=>{this.setState({email:text})}} placeholder="Email..."/>
-        <TextInput onChangeText={(text)=>{this.setState({password:text})}} secureTextEntry={true} placeholder="Password..."/>
-        <Button title='Login' onPress={this.login}/>
-
-        <Text>{this.state.errorText}</Text>
-
-        <DisplayContacts></DisplayContacts>
-        <DisplayProfile></DisplayProfile>
-        <LoginForm></LoginForm>
-        <SignUpForm></SignUpForm>
-        <ViewAllChats></ViewAllChats>
-        <ViewBlockedUsers></ViewBlockedUsers>
-        <ViewChatInfo></ViewChatInfo>
-        <ViewSingleChat></ViewSingleChat>
-
-
-    
-
-      </View>
-      
-    );
-  }
-
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
 }
 
-export default App
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='SignUp'>
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
+
+
+
+
+// import React, { Component } from 'react';
+// //import { Text, TextInput, View, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+// //import styles from './styles/globalStyle';
+
+// //importing navigation libraries is the problem
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// //import Login from "./screens/login";
+// import SignUp from "./screens/signUp";
+
+// const Stack = createNativeStackNavigator();
+
+
+// class App extends Component {
+
+  
+
+//   render() {
+
+    
+    
+
+//     // return (
+//     //   <NavigationContainer>
+//     //     <Stack.Navigator>
+//     //       <Stack.Screen name="signup" component={SignUp} />
+//     //     </Stack.Navigator>
+//     //   </NavigationContainer>
+//     // )
+//       // <NavigationContainer>
+//       //   <Stack.Navigator 
+//       //   initialRouteName = "SignUp">
+
+//       //     <Stack.Screen name="SignUp" component={SignUp} />
+//       //     {/* <Stack.Screen name="Login" component={Login} /> */}
+
+//       //   </Stack.Navigator>
+
+//       // </NavigationContainer>
+//       // <View style={styles.container}><SignUp /></View>
+//   }
+// }
+
+
+// export default App

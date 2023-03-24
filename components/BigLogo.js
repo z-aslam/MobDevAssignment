@@ -1,19 +1,14 @@
 import React, { Component, useState } from 'react';
 import { Text, TextInput, View, Button, Alert } from 'react-native';
+import styles from '../styles/globalStyle';
 
-class DisplayProfile extends Component {
-    constructor(props){
-      super(props);
-  
-      }
-  
-    
+class BigLogo extends Component {   
 
 render() {
     return(
 
         <View>
-
+            <Text style = {styles.titleText}>WHATSTHAT?</Text>
         </View>
 
     );
@@ -22,4 +17,4 @@ render() {
 }
 
 
-export default DisplayProfile;
+export default BigLogo;
