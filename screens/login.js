@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Text, TextInput, View, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import LoginForm from '../components/LoginForm';
+import styles from '../styles/globalStyle';
 
 
 
@@ -16,7 +17,7 @@ class Login extends Component {
 
     return (
 
-        <View> 
+        <View style={styles.container}> 
             <LoginForm/>
         </View>
   
@@ -26,4 +27,4 @@ class Login extends Component {
 
 }
 
-export default LoginForm
+export default Login

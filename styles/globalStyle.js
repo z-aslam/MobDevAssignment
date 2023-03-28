@@ -130,6 +130,30 @@ export default StyleSheet.create({
 
       },
 
+      mainAppButton: {
+        width: "75%",
+        borderRadius: 25,
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "2.5%",
+        marginBottom: "2.5%",
+        marginLeft: '1%',
+        marginRight: '1%',
+        padding: "1%",
+        backgroundColor: colours.darkGreen,
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+      },
+
       buttonText: {
         fontSize: "85%",
         color: "#fff",

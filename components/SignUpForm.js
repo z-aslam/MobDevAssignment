@@ -62,33 +62,26 @@ class SignUpForm extends Component {
             })
         }).then((response) => {
             //this.setState({successfullyRegistered: true});
-            console.log(response.status);
-            if(response.status !== 201){
-              this.setState({errorText:response.statusText});
-              if(response.status == 400){
-                this.setState({errorText: response.statusText + '\nLooks like your email has already been registered!'})
-              }
-              else if(response.status == 500){
-                this.setState({errorText: response.statusText + ', please try again. '})
-              }
+            
+            if(response.status === 201){
+              return response.json();
+            }
+            else if(response.json() === 400){
+              throw "Looks like your email already exists or your password isn't strong enough";
             }
             else{
-              this.setState({errorText: 'Registration successful'})
-              setTimeout(() => {this.props.navigation.navigate('Login')}, 1000);
+              throw 'Server Error: Something went wrong';
             }
             
-            return response.json();   
         }).then((data => {
-          //console.log(this.state.successfullyRegistered);
-            if(response.status == 200){
+          
               console.log(data.user_id); 
-            }
-            else{
               console.log(response.statusText);
-            }        
+              this.setState({errorText: 'Registration successful'})
+              setTimeout(() => {this.props.navigation.navigate('Login')}, 1000);
+                 
         })).catch((err) => {
-            // console.log(this.state.errorText);
-            //this.setState({errorText: err.statusText});
+            this.setState({errorText: err});
         })
       }
       

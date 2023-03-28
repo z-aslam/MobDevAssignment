@@ -33,10 +33,13 @@ class LoginForm extends Component {
             password: this.state.password
           })
         }).then((response) => {
-          if(response.status != 201){
-            this.setState({errorText: 'Login Successful'})
+          console.log(response.status);
+          if(response.status === 200){
+            return response.json();
+          }else if(response.status === 400){
+            throw 'Invalid email / password supplied';
           }else{
-            this.setState({errorText: 'Invalid email / password supplied'})
+            throw 'Server error';
           }
     
           return response.json()
@@ -49,7 +52,7 @@ class LoginForm extends Component {
         }).catch((error)=>{
           console.log(error)
           //error handling sort this future zainab
-          this.setState({errorText: 'Invalid email / password supplied'})
+          this.setState({errorText: error})
         })
     
     };

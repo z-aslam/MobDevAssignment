@@ -7,12 +7,12 @@ import Login from "./screens/login";
 import Home from "./screens/home";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from './UserContext';
+import BottomNav from './components/BottomNav';
 
 const Stack = createNativeStackNavigator();
 
 
 const Router = () => {
-    const [sessionToken,setSessionToken] = useState();
     const userContext = useUser()
     useEffect(()=>{
         const asyncFunc = async () => {
@@ -38,9 +38,7 @@ const AuthStack = () => {
 
 const AppStack = () => {
   return(
-    <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen name = "Home" component={ Home } />
-    </Stack.Navigator>
+    <BottomNav />
   )
 }
 
