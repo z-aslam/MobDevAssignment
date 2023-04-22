@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 
 function BottomNav() {
   return (
-    <Tab.Navigator initialRouteName = 'Chats' screenOptions={({route}) => ({
+    <Tab.Navigator initialRouteName = 'Search' screenOptions={({route}) => ({
       tabBarIcon: ({focused,color,size}) => {
         let iconName;
 

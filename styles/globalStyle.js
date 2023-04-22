@@ -175,5 +175,29 @@ export default StyleSheet.create({
         fontWeight: "400",
         color: '#FF0000',
         textAlign: 'center'
-      }
+      },
+
+      searchBar:{
+        backgroundColor: colours.white,
+        width: '90%',
+        padding: 10,
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+      },
+      pageContainer:{
+        width:'90%',
+        height: '90%',
+        alignItems:'center'
+      },
+
+      
+      
 });
