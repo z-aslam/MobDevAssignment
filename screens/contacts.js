@@ -11,6 +11,8 @@ import {
 } from "react-native";
 //import { useNavigation } from '@react-navigation/native';
 import styles from "../styles/globalStyle";
+import DisplayContacts from '../components/DisplayContacts';
+import AddContact from "../components/AddContact";
 
 class Contacts extends Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class Contacts extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Contacts</Text>
+        <DisplayContacts />
       </View>
     );
   }
