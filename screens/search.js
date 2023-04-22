@@ -1,12 +1,12 @@
 import React, { Component, useState } from 'react';
 import { Text, TextInput, View, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import LoginForm from '../components/LoginForm';
+import SearchContacts from '../components/SearchContacts';
 import styles from '../styles/globalStyle';
 
 
 
 
-class Login extends Component {
+class Search extends Component {
   constructor(props){
     super(props);
 
@@ -18,7 +18,7 @@ class Login extends Component {
     return (
 
         <View style={styles.container}> 
-            <LoginForm navigation ={this.props.navigation}/>
+            <SearchContacts navigation ={this.props.navigation}/>
         </View>
   
       
@@ -27,4 +27,4 @@ class Login extends Component {
 
 }
 
-export default Login
+export default Search

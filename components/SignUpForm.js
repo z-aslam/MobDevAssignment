@@ -23,7 +23,7 @@ class SignUpForm extends Component {
       
     
       signUpHandler = () => {
-
+        console.log('singup handle')
         Alert.alert('First Name: ' + this.state.first_name 
         + 'Last Name: ' + this.state.last_name 
         + 'Email: ' + this.state.email 
@@ -61,26 +61,19 @@ class SignUpForm extends Component {
                 password: this.state.password
             })
         }).then((response) => {
-            //this.setState({successfullyRegistered: true});
-            
+            console.log(response)
             if(response.status === 201){
-              return response.json();
+              throw "Signup Successful.. Please Login"
             }
-            else if(response.json() === 400){
+            else if(response.status === 400){
               throw "Looks like your email already exists or your password isn't strong enough";
             }
             else{
               throw 'Server Error: Something went wrong';
             }
             
-        }).then((data => {
-          
-              console.log(data.user_id); 
-              console.log(response.statusText);
-              this.setState({errorText: 'Registration successful'})
-              setTimeout(() => {this.props.navigation.navigate('Login')}, 1000);
-                 
-        })).catch((err) => {
+        }).catch((err) => {
+          console.log(err)
             this.setState({errorText: err});
         })
       }

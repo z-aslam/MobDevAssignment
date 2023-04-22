@@ -19,15 +19,22 @@
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.3",
+    "react-native": "0.71.6",
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
-    "react-native-web": "~0.18.10",
-    "react-router-dom": "^6.9.0"
+    "react-native-web": "^0.18.12",
+    "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "eslint": "^8.36.0"
+    "babel-loader": "^9.1.2",
+    "babel-plugin-react-native-web": "^0.19.4",
+    "eslint": "^8.36.0",
+    "html-webpack-plugin": "^5.5.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.2",
+    "webpack-dev-server": "^4.13.3"
   },
   "private": true
 }

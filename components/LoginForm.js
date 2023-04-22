@@ -1,14 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Text, TextInput, View, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import validator from 'email-validator';
+import React, { Component } from 'react';
+import { Text, TextInput, View,TouchableOpacity } from 'react-native';
 import styles from '../styles/globalStyle';
 import BigLogo from '../components/BigLogo';
-
-
-const [email, setEmail] = useState(null);
-const [password, setPassword] = useState(null);
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from '../UserContext';
 
 class LoginForm extends Component {
+    static contextType = UserContext;
     constructor(props){
         super(props);
     
@@ -22,24 +20,7 @@ class LoginForm extends Component {
       }  
     
       loginHandler = () => {
-
-        Alert.alert('Email: ' + this.state.email, 
-        'Password: ' + this.state.password)
-    
-    
-        //Check email and password validity
-
-        if(!this.checkEmail(this.state.email)){
-          this.setState({errorText:'* Email in wrong format'});
-          return;
-        }
-        if(!this.checkPassword(this.state.password)){
-          this.setState({errorText:'* Password in wrong format'});
-          return;
-        }
-        
-        
-        fetch('http://localhost:3333/api/1.0.0/user', {
+        fetch('http://localhost:3333/api/1.0.0/login', {
             method: "POST",
             headers: {
                 Accept: 'application/json',
@@ -49,55 +30,26 @@ class LoginForm extends Component {
                 password: this.state.password
             })
         }).then((response) => {
-            //this.setState({successfullyRegistered: true});
-            console.log(response.status);
-            if(response.status !== 201){
-              this.setState({errorText:response.statusText});
-              if(response.status == 400){
-                this.setState({errorText: response.statusText + '\nLooks like your email has already been registered!'})
-              }
-              else if(response.status == 500){
-                this.setState({errorText: response.statusText + ', please try again. '})
-              }
-            }
-            else{
-              this.setState({errorText: 'Registration successful'})
-              setTimeout(() => {this.props.navigation.navigate('Login')}, 1000);
-            }
-            
-            return response.json();   
-        }).then((data => {
-          //console.log(this.state.successfullyRegistered);
-            if(response.status == 200){
-              console.log(data.user_id); 
-            }
-            else{
-              console.log(response.statusText);
-            }        
-        })).catch((err) => {
-            // console.log(this.state.errorText);
+          if(response.status == 200){
+            return response.json()
+          }else if(response.status == 400){
+            this.setState({errorText: 'Incorrect Email or Password'}) 
+          }else{
+            this.setState({errorText: 'Server Error'}) 
+          }
+           
+
+        }).then(data => {
+          AsyncStorage.setItem('sessionToken',data.token)
+          AsyncStorage.setItem('userID',data.id)
+          this.context.updateData()
+        }).catch((err) => {
+            console.log(err);
             //this.setState({errorText: err.statusText});
         })
       }
-      
-      checkEmail = (email) => {
-        //Email check logic
-        return validator.validate(email); 
-      }
-    
-      checkPassword = (password) => {
-        //Password check logic
-        const PASSWORD_REGEX = new RegExp('^(?=.*[A-Z])(?=.*[1@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,30}$');
-        //console.log(PASSWORD_REGEX.test(password));
-        return PASSWORD_REGEX.test(password);
-      }
-    
-      
 
       render() {
-
-        const navigation = this.props.navigation;
-    
         return (
           <View style={styles.container}>
     
@@ -108,14 +60,14 @@ class LoginForm extends Component {
     
               <TextInput 
               style = {styles.inputView}
-              value ={email}
+              onChangeText={(v) => this.setState({email: v})}
               placeholder="Email..."
               placeholderTextColor = "#808080"
               />
     
               <TextInput 
               style = {styles.inputView}
-              value = {password}
+              onChangeText={(v) => this.setState({password: v})}
               secureTextEntry={true} 
               placeholder="Password..."
               placeholderTextColor = "#808080"
@@ -130,7 +82,7 @@ class LoginForm extends Component {
     
             <TouchableOpacity
             style = {styles.inputButton}
-            onPress={()=>navigation.navigate('Login')}>
+            onPress={this.loginHandler}>
               <Text 
               style = {styles.buttonText}
               numberOfLines = {1}
@@ -141,7 +93,7 @@ class LoginForm extends Component {
 
             <TouchableOpacity
             style = {styles.altInputButton}
-            onPress={()=>navigation.navigate('SignUp')}>
+            onPress={()=>this.props.navigation.navigate('SignUp')}>
               <Text 
               style = {styles.buttonText}
               numberOfLines = {1}

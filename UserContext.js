@@ -11,12 +11,12 @@ export const UserProvider = ({children}) => {
     const [UserData,setUserData] = useState({
         sessionToken: null,
         userID: null
-        
     })
 
     const updateData = () => {
         AsyncStorage.getItem('sessionToken').then(sT => {
             AsyncStorage.getItem('userID').then(uid => {
+                console.log(uid)
                 setUserData({
                     sessionToken: sT,
                     userID: uid
