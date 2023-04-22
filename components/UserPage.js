@@ -72,13 +72,27 @@ class UserPage extends Component {
   }
 
   handleImageChange = () => {
-    // ImagePicker.launchImageLibraryAsync({
-    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //     allowsEditing: true
-    // }).then((image) => {
-    //     if(!image.canceled) {
-    //     }
-    // })
+    ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true
+    }).then((image) => {
+        if(!image.canceled) {
+          console.log(image.assets[0])
+          fetch(
+            `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
+            {
+              method: "POST",
+              headers: {
+                Accept: "image/png",
+                "X-Authorization": this.context.UserData.sessionToken,
+                "Content-Type": "image/png",
+              },
+              body: {uri: image.assets[0].uri}
+              
+            }
+          )
+        }
+    })
   };
   render() {
     return (
@@ -101,7 +115,7 @@ class UserPage extends Component {
         <Text
           style={{ fontSize: 25, fontStyle: "italic", color: colours.black }}
         >
-          sam@test.com
+          {this.state.userData.email}
         </Text>
       </View>
     );
