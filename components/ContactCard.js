@@ -36,8 +36,6 @@ class ContactCard extends Component {
         return response.json();
       })
       .then((data) => {
-        console.log(this.props.user_id);
-        console.log(containsObject(this.props.user_id, data));
         if (containsObject(this.props.user_id, data)) {
           this.setState({ contactAdded: true });
         } else {
@@ -61,13 +59,41 @@ class ContactCard extends Component {
           },
         }
       ).then((response) => {
-        console.log(response);
         switch (response.status) {
           case 200:
             this.setState({ contactAdded: true });
             break;
           case 400:
             this.setState({ errorText: "You can't add yourself as a contact" });
+            break;
+          case 401:
+            this.setState({ errorText: "Unauthorized" });
+            break;
+          case 404:
+            this.setState({ errorText: "User not found - server error" });
+          case 500:
+            this.setState({ errorText: "Server error" });
+            break;
+        }
+      });
+    }else{
+      fetch(
+        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/contact`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "X-Authorization": this.context.UserData.sessionToken,
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((response) => {
+        switch (response.status) {
+          case 200:
+            this.setState({ contactAdded: false });
+            break;
+          case 400:
+            this.setState({ errorText: "You can't remove yourself as a contact" });
             break;
           case 401:
             this.setState({ errorText: "Unauthorized" });

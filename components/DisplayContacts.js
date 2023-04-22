@@ -27,7 +27,6 @@ class DisplayContacts extends Component {
       },
     })
       .then((response) => {
-        console.log(response.status);
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
@@ -37,7 +36,6 @@ class DisplayContacts extends Component {
         }
       })
       .then((json) => {
-        console.log(json);
         this.setState({ contacts: json });
       })
 
@@ -50,7 +48,12 @@ class DisplayContacts extends Component {
     this.getContacts();
   }
 
+
+
   render() {
+    this.props.navigation.addListener('focus', (e) => {
+     this.getContacts()
+    });
     return (
       <View style={globalStyle.pageContainer}>
 

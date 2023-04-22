@@ -22,7 +22,7 @@ class Contacts extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <DisplayContacts />
+        <DisplayContacts navigation = {this.props.navigation}/>
       </View>
     );
   }

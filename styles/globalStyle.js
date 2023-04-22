@@ -36,6 +36,29 @@ export default StyleSheet.create({
         elevation: 5,
         
       },
+      miniTitle: {
+        
+        borderColor:colours.green,
+        borderWidth: 2,
+        borderRadius: 5,
+        fontSize: 15,
+        fontWeight: "bold",
+        fontFamily: "Arial",
+        color: colours.green,
+        textAlign: 'center',
+        padding: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+        
+      },
+
 
       secondaryTitleText: {
 

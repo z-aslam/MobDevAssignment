@@ -15,6 +15,8 @@ import globalStyle from "../styles/globalStyle";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colours } from "../styles/colours";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from 'expo-file-system';
+
 class UserPage extends Component {
   static contextType = UserContext;
   constructor(props) {
@@ -74,23 +76,28 @@ class UserPage extends Component {
   handleImageChange = () => {
     ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true
+        allowsEditing: true,
+        base64: true
     }).then((image) => {
         if(!image.canceled) {
-          console.log(image.assets[0])
-          fetch(
-            `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
-            {
-              method: "POST",
-              headers: {
-                Accept: "image/png",
-                "X-Authorization": this.context.UserData.sessionToken,
-                "Content-Type": "image/png",
-              },
-              body: {uri: image.assets[0].uri}
-              
-            }
-          )
+            fetch(`data:image/png;base64,${image.assets[0].base64}`).then(res => res.blob()).then(blob => {
+                fetch(
+                    `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
+                    {
+                      method: "POST",
+                      headers: {
+                        Accept: "image/png",
+                        "X-Authorization": this.context.UserData.sessionToken,
+                        "Content-Type" : "image/png",
+                      },
+                      body: blob
+                      
+                    }
+                  ).then(response => {
+                    this.setState({imageURI: `data:image/png;base64,${image.assets[0].base64}`})
+                  })
+            })
+          
         }
     })
   };
