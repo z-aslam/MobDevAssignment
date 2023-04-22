@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Text, TextInput, View, Button, Alert } from 'react-native';
+import { Text, TextInput, View, Button, Alert, ScrollView } from 'react-native';
 import globalStyle from '../styles/globalStyle';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-web';
@@ -46,16 +46,13 @@ render() {
         <View style={globalStyle.pageContainer}>
             <View style = {{width: '100%', flexDirection:'row',alignItems:'center'}}>
             <TextInput style={[globalStyle.searchBar, {flex: 9}]} placeholder='Search Contacts...' onChangeText={(text)=>{this.searchContact(text)}}/>
-            {/* <TouchableOpacity style={{width:'100%', textAlign:"center",flex: 1}}>
-                <Ionicons name = 'search' color={colours.black}  size={24}/> 
-            </TouchableOpacity> */}
             </View>
 
-            <View style = {{width: '100%', marginTop: 20}}>
+            <ScrollView style = {{width: '100%', marginTop: 10,height: '100%'}}>
                 {this.state.contacts.map(({email,family_name,given_name,user_id})=>(
                     <ContactCard email = {email} family_name = {family_name} given_name = {given_name} user_id = {user_id} key={user_id}/>
                 ))}
-            </View>
+            </ScrollView>
         </View>
 
     );
