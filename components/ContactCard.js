@@ -21,7 +21,8 @@ class ContactCard extends Component {
     this.state = {
       contactAdded: false,
       errorText: "",
-      imageURI: ''
+      imageURI: "",
+      contactAddedToChat: this.props.inChat,
     };
   }
 
@@ -48,93 +49,153 @@ class ContactCard extends Component {
         console.log(err);
       });
 
-      fetch(
-        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/photo`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "image/png",
-            "X-Authorization": this.context.UserData.sessionToken,
-            "Content-Type": "image/png",
-          },
-        }
-      )
-        .then((response) => {
-          return response.blob();
-        })
-        .then((imageRAW) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const base64data = reader.result;
-            this.setState({ imageURI: base64data });
-          };
-          reader.readAsDataURL(imageRAW);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    fetch(`http://localhost:3333/api/1.0.0/user/${this.props.user_id}/photo`, {
+      method: "GET",
+      headers: {
+        Accept: "image/png",
+        "X-Authorization": this.context.UserData.sessionToken,
+        "Content-Type": "image/png",
+      },
+    })
+      .then((response) => {
+        return response.blob();
+      })
+      .then((imageRAW) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64data = reader.result;
+          this.setState({ imageURI: base64data });
+        };
+        reader.readAsDataURL(imageRAW);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   handleAdd = () => {
-    if (!this.state.contactAdded) {
-      fetch(
-        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/contact`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "X-Authorization": this.context.UserData.sessionToken,
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((response) => {
-        switch (response.status) {
-          case 200:
-            this.setState({ contactAdded: true });
-            break;
-          case 400:
-            this.setState({ errorText: "You can't add yourself as a contact" });
-            break;
-          case 401:
-            this.setState({ errorText: "Unauthorized" });
-            break;
-          case 404:
-            this.setState({ errorText: "User not found - server error" });
-          case 500:
-            this.setState({ errorText: "Server error" });
-            break;
-        }
-      });
+    if (!this.props.chat_id) {
+      if (!this.state.contactAdded) {
+        fetch(
+          `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/contact`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "X-Authorization": this.context.UserData.sessionToken,
+              "Content-Type": "application/json",
+            },
+          }
+        ).then((response) => {
+          switch (response.status) {
+            case 200:
+              this.setState({ contactAdded: true });
+              break;
+            case 400:
+              this.setState({
+                errorText: "You can't add yourself as a contact",
+              });
+              break;
+            case 401:
+              this.setState({ errorText: "Unauthorized" });
+              break;
+            case 404:
+              this.setState({ errorText: "User not found - server error" });
+            case 500:
+              this.setState({ errorText: "Server error" });
+              break;
+          }
+        });
+      } else {
+        fetch(
+          `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/contact`,
+          {
+            method: "DELETE",
+            headers: {
+              Accept: "application/json",
+              "X-Authorization": this.context.UserData.sessionToken,
+              "Content-Type": "application/json",
+            },
+          }
+        ).then((response) => {
+          switch (response.status) {
+            case 200:
+              this.setState({ contactAdded: false });
+              break;
+            case 400:
+              this.setState({
+                errorText: "You can't remove yourself as a contact",
+              });
+              break;
+            case 401:
+              this.setState({ errorText: "Unauthorized" });
+              break;
+            case 404:
+              this.setState({ errorText: "User not found - server error" });
+            case 500:
+              this.setState({ errorText: "Server error" });
+              break;
+          }
+        });
+      }
     } else {
-      fetch(
-        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/contact`,
-        {
-          method: "DELETE",
-          headers: {
-            Accept: "application/json",
-            "X-Authorization": this.context.UserData.sessionToken,
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((response) => {
-        switch (response.status) {
-          case 200:
-            this.setState({ contactAdded: false });
-            break;
-          case 400:
-            this.setState({
-              errorText: "You can't remove yourself as a contact",
-            });
-            break;
-          case 401:
-            this.setState({ errorText: "Unauthorized" });
-            break;
-          case 404:
-            this.setState({ errorText: "User not found - server error" });
-          case 500:
-            this.setState({ errorText: "Server error" });
-            break;
-        }
-      });
+      if (!this.state.contactAddedToChat) {
+        fetch(
+          `http://localhost:3333/api/1.0.0/chat/${this.props.chat_id}/user/${this.props.user_id}`,
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "X-Authorization": this.context.UserData.sessionToken,
+              "Content-Type": "application/json",
+            },
+          }
+        ).then((response) => {
+          console.log(response)
+          switch (response.status) {
+            case 200:
+              this.setState({ contactAddedToChat: true });
+              break;
+            case 400:
+              throw "bad request";
+            case 401:
+              throw "unauthorized";
+            case 403:
+              throw "forbidden";
+            case 404:
+              throw "Not Found";
+            case 500:
+              throw "server error";
+          }
+        });
+      } else {
+        fetch(
+          `http://localhost:3333/api/1.0.0/chat/${this.props.chat_id}/user/${this.props.user_id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Accept: "application/json",
+              "X-Authorization": this.context.UserData.sessionToken,
+              "Content-Type": "application/json",
+            },
+          }
+        ).then((response) => {
+          switch (response.status) {
+            case 200:
+              this.setState({ contactAddedToChat: false });
+              break;
+            case 400:
+              throw "bad request";
+            case 401:
+              throw "unauthorized";
+            case 403:
+              throw "forbidden";
+            case 404:
+              throw "Not Found";
+            case 500:
+              throw "server error";
+          }
+        });
+      }
     }
   };
   render() {
@@ -145,7 +206,7 @@ class ContactCard extends Component {
             width: 75,
             height: 75,
             borderRadius: 75,
-            margin: 5
+            margin: 5,
           }}
         >
           <Image
@@ -158,10 +219,9 @@ class ContactCard extends Component {
               borderRadius: 75,
             }}
           />
-
         </View>
         <View style={style.subContainer}>
-          <View style={{ flexDirection: "column",width: '55%'}}>
+          <View style={{ flexDirection: "column", width: "55%" }}>
             <Text style={[style.title, style.textGeneral]}>
               {this.props.given_name + " " + this.props.family_name}
             </Text>
@@ -170,22 +230,35 @@ class ContactCard extends Component {
             </Text>
           </View>
           <TouchableOpacity style={style.button} onPress={this.handleAdd}>
-            {this.state.contactAdded ? (
+            {!this.props.chat_id ? (
+              this.state.contactAdded ? (
+                <Ionicons
+                  name="person-remove-outline"
+                  color={colours.black}
+                  size={24}
+                />
+              ) : (
+                <Ionicons
+                  name="person-add-outline"
+                  color={colours.black}
+                  size={24}
+                />
+              )
+            ) : !this.state.contactAddedToChat ? (
               <Ionicons
-                name="person-remove-outline"
+                name="add-circle-outline"
                 color={colours.black}
                 size={24}
               />
             ) : (
               <Ionicons
-                name="person-add-outline"
+                name="close-circle-outline"
                 color={colours.black}
                 size={24}
               />
             )}
           </TouchableOpacity>
         </View>
-        
       </View>
     );
   }
@@ -206,8 +279,8 @@ const style = StyleSheet.create({
   subContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft:10,
-    width: '100%'
+    marginLeft: 10,
+    width: "100%",
   },
   container: {
     backgroundColor: colours.white,

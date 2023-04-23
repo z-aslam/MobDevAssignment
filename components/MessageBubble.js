@@ -26,20 +26,18 @@ class MessageBubble extends Component {
   }
 
   componentDidMount() {
-    if(this.props.user_id == this.context.UserData.user_id){
-        this.setState({isUser: true})
-    }
+
   }
   render() {
     return (
      
         <View style={style.container}>
             {
-                !this.state.isUser && (
+                this.props.user_id == this.context.UserData.userID && (
                     <View style={{width:'40%'}}></View>
                 )
             }
-            <View style={[style.bubble,this.props.recieved ? {backgroundColor:colours.lightGrey} : {backgroundColor: colours.green}]}>
+            <View style={[style.bubble,this.props.user_id == this.context.UserData.userID? {backgroundColor:colours.lightGrey} : {backgroundColor: colours.green}]}>
                 
             <Text style= {[{fontSize: 15,fontWeight:'bold'},style.text]}>
                 {this.props.author}
