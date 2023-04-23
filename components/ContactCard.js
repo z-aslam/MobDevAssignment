@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { UserContext } from "../UserContext";
 import { StyleSheet } from "react-native";
@@ -20,6 +21,7 @@ class ContactCard extends Component {
     this.state = {
       contactAdded: false,
       errorText: "",
+      imageURI: ''
     };
   }
 
@@ -45,6 +47,32 @@ class ContactCard extends Component {
       .catch((err) => {
         console.log(err);
       });
+
+      fetch(
+        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/photo`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "image/png",
+            "X-Authorization": this.context.UserData.sessionToken,
+            "Content-Type": "image/png",
+          },
+        }
+      )
+        .then((response) => {
+          return response.blob();
+        })
+        .then((imageRAW) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const base64data = reader.result;
+            this.setState({ imageURI: base64data });
+          };
+          reader.readAsDataURL(imageRAW);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }
   handleAdd = () => {
     if (!this.state.contactAdded) {
@@ -76,7 +104,7 @@ class ContactCard extends Component {
             break;
         }
       });
-    }else{
+    } else {
       fetch(
         `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/contact`,
         {
@@ -93,7 +121,9 @@ class ContactCard extends Component {
             this.setState({ contactAdded: false });
             break;
           case 400:
-            this.setState({ errorText: "You can't remove yourself as a contact" });
+            this.setState({
+              errorText: "You can't remove yourself as a contact",
+            });
             break;
           case 401:
             this.setState({ errorText: "Unauthorized" });
@@ -110,24 +140,52 @@ class ContactCard extends Component {
   render() {
     return (
       <View style={style.container}>
-        <Text style={[style.title, style.textGeneral]}>
-          {this.props.given_name + " " + this.props.family_name}
-        </Text>
-        <Text style={[style.email, style.textGeneral]}>
-          {" "}
-          {this.props.email}
-        </Text>
-        <TouchableOpacity style={style.button} onPress={this.handleAdd}>
-          {this.state.contactAdded ? (
-            <Ionicons
-              name="person-remove-outline"
-              color={colours.white}
-              size={24}
-            />
-          ) : (
-            <Ionicons name="person-add-outline" color={colours.white} size={24} />
-          )}
-        </TouchableOpacity>
+        <View
+          style={{
+            width: 75,
+            height: 75,
+            borderRadius: 75,
+            margin: 5
+          }}
+        >
+          <Image
+            source={{
+              uri: this.state.imageURI,
+            }}
+            style={{
+              height: 75,
+              width: 75,
+              borderRadius: 75,
+            }}
+          />
+
+        </View>
+        <View style={style.subContainer}>
+          <View style={{ flexDirection: "column",width: '55%'}}>
+            <Text style={[style.title, style.textGeneral]}>
+              {this.props.given_name + " " + this.props.family_name}
+            </Text>
+            <Text style={[style.email, style.textGeneral]}>
+              {this.props.email}
+            </Text>
+          </View>
+          <TouchableOpacity style={style.button} onPress={this.handleAdd}>
+            {this.state.contactAdded ? (
+              <Ionicons
+                name="person-remove-outline"
+                color={colours.black}
+                size={24}
+              />
+            ) : (
+              <Ionicons
+                name="person-add-outline"
+                color={colours.black}
+                size={24}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+        
       </View>
     );
   }
@@ -145,8 +203,14 @@ const containsObject = (user_id, list) => {
 };
 
 const style = StyleSheet.create({
+  subContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft:10,
+    width: '100%'
+  },
   container: {
-    backgroundColor: colours.green,
+    backgroundColor: colours.white,
     width: "100%",
     padding: 10,
     borderRadius: 10,
@@ -160,9 +224,10 @@ const style = StyleSheet.create({
     marginVertical: 10,
     elevation: 5,
     gap: 10,
+    flexDirection: "row",
   },
   textGeneral: {
-    color: colours.white,
+    color: colours.black,
   },
   title: {
     fontSize: 20,
@@ -173,7 +238,6 @@ const style = StyleSheet.create({
     fontStyle: "italic",
   },
   button: {
-    width: "100%",
     textAlign: "right",
   },
   buttonText: {

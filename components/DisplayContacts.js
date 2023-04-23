@@ -56,14 +56,16 @@ class DisplayContacts extends Component {
     });
     return (
       <View style={globalStyle.pageContainer}>
-
+        <Text style={{width: '90%', textAlign:'left', fontSize:30, fontWeight:'bold'}}>
+          Your Contacts
+        </Text>
         <ScrollView style={{ width: "100%", marginTop: 10, height: "100%" }}>
           {this.state.contacts.map(
             ({ email, first_name, last_name, user_id }) => (
               <ContactCard
                 email={email}
-                family_name={first_name}
-                given_name={last_name}
+                family_name={last_name}
+                given_name={first_name}
                 user_id={user_id}
                 key={user_id}
               />

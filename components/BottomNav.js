@@ -38,7 +38,7 @@ function LogoTitle() {
 
 function BottomNav() {
   return (
-    <Tab.Navigator initialRouteName = 'You' screenOptions={({route}) => ({
+    <Tab.Navigator initialRouteName = 'Chats' screenOptions={({route}) => ({
       tabBarIcon: ({focused,color,size}) => {
         let iconName;
 

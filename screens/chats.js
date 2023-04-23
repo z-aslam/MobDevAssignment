@@ -11,6 +11,7 @@ import {
 } from "react-native";
 //import { useNavigation } from '@react-navigation/native';
 import styles from "../styles/globalStyle";
+import ChatForm from "../components/ChatForm";
 
 class Chats extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class Chats extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Chats</Text>
+        <ChatForm/>
       </View>
     );
   }

@@ -7,13 +7,12 @@ export default StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: colours.offWhite,
         alignItems: 'center',
         justifyContent: 'center',
       },
 
       titleText: {
-        
         borderColor:colours.green,
         borderWidth: 5,
         borderRadius: 10,

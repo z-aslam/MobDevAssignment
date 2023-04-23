@@ -15,16 +15,19 @@ import globalStyle from "../styles/globalStyle";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colours } from "../styles/colours";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from "expo-file-system";
 
 class UserPage extends Component {
   static contextType = UserContext;
   constructor(props) {
     super(props);
-    this.state = { imageURI: "", userData: {
-        first_name: '',
-        email: ''
-      } };
+    this.state = {
+      imageURI: "",
+      userData: {
+        first_name: "",
+        email: "",
+      },
+    };
   }
 
   componentDidMount() {
@@ -38,14 +41,17 @@ class UserPage extends Component {
           "Content-Type": "application/json",
         },
       }
-    ).then((response)=>{
-        return response.json()
-    }).then(userData => {
-        console.log(userData)
-        this.setState({userData: userData})
-    }).catch((err)=>{
-        throw err
-    });
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((userData) => {
+        console.log(userData);
+        this.setState({ userData: userData });
+      })
+      .catch((err) => {
+        throw err;
+      });
     fetch(
       `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
       {
@@ -75,42 +81,50 @@ class UserPage extends Component {
 
   handleImageChange = () => {
     ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        base64: true
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      base64: true,
     }).then((image) => {
-        if(!image.canceled) {
-            fetch(`data:image/png;base64,${image.assets[0].base64}`).then(res => res.blob()).then(blob => {
-                fetch(
-                    `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
-                    {
-                      method: "POST",
-                      headers: {
-                        Accept: "image/png",
-                        "X-Authorization": this.context.UserData.sessionToken,
-                        "Content-Type" : "image/png",
-                      },
-                      body: blob
-                      
-                    }
-                  ).then(response => {
-                    this.setState({imageURI: `data:image/png;base64,${image.assets[0].base64}`})
-                  })
-            })
-          
-        }
-    })
+      if (!image.canceled) {
+        fetch(`data:image/png;base64,${image.assets[0].base64}`)
+          .then((res) => res.blob())
+          .then((blob) => {
+            fetch(
+              `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "image/png",
+                  "X-Authorization": this.context.UserData.sessionToken,
+                  "Content-Type": "image/png",
+                },
+                body: blob,
+              }
+            ).then((response) => {
+              this.setState({
+                imageURI: `data:image/png;base64,${image.assets[0].base64}`,
+              });
+            });
+          });
+      }
+    });
   };
   render() {
     return (
-      <View style={globalStyle.pageContainer}>
+      <View style={[globalStyle.pageContainer]}>
         <TouchableOpacity onPress={this.handleImageChange}>
           {/* <Ionicons name='add-circle' color={colours.lighterGrey} size={200}/> */}
           <Image
             source={{
               uri: this.state.imageURI,
             }}
-            style={{ height: 250, width: 250, borderRadius: 250, margin: 20 }}
+            style={{
+              height: 250,
+              width: 250,
+              borderRadius: 250,
+              margin: 20,
+
+            }}
           />
         </TouchableOpacity>
         <Text
