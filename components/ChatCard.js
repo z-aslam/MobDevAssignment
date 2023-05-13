@@ -37,6 +37,7 @@ class ChatCard extends Component {
       addContact: false,
       contacts: [],
       members: [],
+      titleText: this.props.name
     };
   }
 
@@ -172,7 +173,44 @@ class ChatCard extends Component {
         console.log(err);
       });
   };
-
+  handleEdit = () => {
+    fetch(
+        `http://localhost:3333/api/1.0.0/chat/${this.props.chat_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "X-Authorization": this.context.UserData.sessionToken,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: this.state.titleText
+          })
+        }
+      ).then((response) => {
+        switch (response.status) {
+          case 200:
+            this.props.toast.show("Chat title edited", {
+              type: "success"
+            });
+            break;
+          case 401:
+            this.props.toast.show("Unauthorized", {
+              type: "danger"
+            });
+            break;
+          case 404:
+            this.props.toast.show("Not found", {
+              type: "danger"
+            });
+          case 500:
+            this.props.toast.show("Server error", {
+              type: "danger"
+            });
+            break;
+        }
+    })
+  }
   componentDidMount() {
     this.getMessages();
     this.getContacts();
@@ -180,18 +218,16 @@ class ChatCard extends Component {
   render() {
     return (
       <View style={[style.container]}>
-        <TouchableOpacity
+        <View
           style={{
             flexDirection: "row",
             alignItems: "center",
             width: "100%",
             gap: 10,
           }}
-          onPress={() => {
-            this.setState({ chatOpened: !this.state.chatOpened });
-          }}
+          
         >
-          <View
+          <TouchableOpacity
             style={{
               backgroundColor: colours.white,
               width: 45,
@@ -200,17 +236,20 @@ class ChatCard extends Component {
               margin: 5,
               flex: 2,
             }}
+            onPress={() => {
+              this.setState({ chatOpened: !this.state.chatOpened });
+            }}
           >
             <Ionicons
               name="chatbubbles-outline"
               size={40}
               color={colours.green}
             />
-          </View>
-          <View style={{ width: "70%", marginVertical: 10, gap: 5, flex: 10 }}>
-            <Text style={{ fontWeight: "bold", fontSize: 17 }}>
-              {this.props.name}
-            </Text>
+          </TouchableOpacity>
+          <View style={{ width: "70%", marginVertical: 10, gap: 5, flex: 8 }}>
+            <TextInput style={{ fontWeight: "bold", fontSize: 17 }} defaultValue={this.props.name} onChangeText={(v)=>{this.setState({titleText: v})}} onSubmitEditing={this.handleEdit}/>
+              
+            
             <Text style={{ fontSize: 15, fontStyle: "italic" }}>
               {this.state.members.length < 4
                 ? this.state.members.map((text) => {
@@ -222,17 +261,21 @@ class ChatCard extends Component {
                 : this.state.members.length + " Members"}
             </Text>
           </View>
-          <View style={{ flex: 1 }}>
+          <TouchableOpacity style={{ flex: 1 }}
+          onPress={() => {
+            this.setState({ chatOpened: !this.state.chatOpened });
+          }}
+          >
             <Ionicons
               name={
                 this.state.chatOpened
                   ? "caret-up-outline"
                   : "caret-down-outline"
               }
-              size={15}
+              size={18}
             />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
 
         {this.state.chatOpened && (
           <View
@@ -260,8 +303,11 @@ class ChatCard extends Component {
 
                     return (
                       <MessageBubble
+                      toast = {this.props.toast}
+                        chat_id = {this.props.chat_id}
                         author={item.author.first_name}
                         message={item.message}
+                        message_id = {item.message_id}
                         timestamp={hours + ":" + minutes + ":" + seconds}
                         user_id={item.author.user_id}
                         key={item.message_id}
