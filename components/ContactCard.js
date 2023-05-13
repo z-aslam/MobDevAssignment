@@ -29,6 +29,7 @@ class ContactCard extends Component {
       errorText: "",
       imageURI: "",
       contactAddedToChat: this.props.inChat,
+      contactBlocked: this.props.contactBlocked
     };
   }
 
@@ -258,14 +259,98 @@ class ContactCard extends Component {
       }
     }
   };
+
+  handleBlock = () => {
+    if(!this.state.contactBlocked){
+    fetch(
+      `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/block`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "X-Authorization": this.context.UserData.sessionToken,
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((response) => {
+      switch (response.status) {
+        case 200:
+          this.setState({ contactAdded: false, contactBlocked: true });
+          this.props.toast.show("Contact Blocked", {
+            type: "success"
+          });
+          break;
+        case 400:
+          this.props.toast.show("You cannot block yourself", {
+            type: "warning"
+          });
+          break;
+        case 401:
+          this.props.toast.show("Unauthorized", {
+            type: "danger"
+          });
+          break;
+        case 404:
+          this.props.toast.show("User not found - Server error", {
+            type: "danger"
+          });
+        case 500:
+          this.props.toast.show("Server error", {
+            type: "danger"
+          });
+          break;
+      }
+    });
+  }else{
+    fetch(
+      `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/block`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "X-Authorization": this.context.UserData.sessionToken,
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((response) => {
+      switch (response.status) {
+        case 200:
+          this.setState({ contactAdded: false, contactBlocked: false });
+          this.props.toast.show("Contact UnBlocked", {
+            type: "success"
+          });
+          break;
+        case 400:
+          this.props.toast.show("You cannot unblock yourself", {
+            type: "warning"
+          });
+          break;
+        case 401:
+          this.props.toast.show("Unauthorized", {
+            type: "danger"
+          });
+          break;
+        case 404:
+          this.props.toast.show("User not found - Server error", {
+            type: "danger"
+          });
+        case 500:
+          this.props.toast.show("Server error", {
+            type: "danger"
+          });
+          break;
+      }
+    });
+  }
+  }
   render() {
     return (
       <View style={style.container}>
         <View
           style={{
-            width: 75,
-            height: 75,
-            borderRadius: 75,
+            width: 45,
+            height: 45,
+            borderRadius: 45,
             margin: 5,
           }}
         >
@@ -274,14 +359,14 @@ class ContactCard extends Component {
               uri: this.state.imageURI,
             }}
             style={{
-              height: 75,
-              width: 75,
-              borderRadius: 75,
+              height: 45,
+              width: 45,
+              borderRadius: 45,
             }}
           />
         </View>
         <View style={style.subContainer}>
-          <View style={{ flexDirection: "column", width: "55%" }}>
+          <View style={{ flexDirection: "column", flex: 10 }}>
             <Text style={[style.title, style.textGeneral]}>
               {this.props.given_name + " " + this.props.family_name}
             </Text>
@@ -318,6 +403,9 @@ class ContactCard extends Component {
               />
             )}
           </TouchableOpacity>
+          {!this.props.chat_id && (<TouchableOpacity onPress={this.handleBlock}>
+            {!this.state.contactBlocked ? (<Ionicons name = 'eye-off-outline' color = {colours.black} size={24}/>) : (<Ionicons name = 'eye-outline' color = {colours.black} size={24}/>) }
+          </TouchableOpacity>)}
         </View>
       </View>
     );
@@ -340,7 +428,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 10,
-    width: "100%",
+    width: "75%",
   },
   container: {
     backgroundColor: colours.white,
@@ -372,6 +460,8 @@ const style = StyleSheet.create({
   },
   button: {
     textAlign: "right",
+    margin: 20,
+    flex: 2,
   },
   buttonText: {
     width: "100%",

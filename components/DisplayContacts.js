@@ -13,52 +13,92 @@ class DisplayContacts extends Component {
     super(props);
 
     this.state = {
-      contacts: []
+      contacts: [],
+      blocked: 0
     }
   }
 
-  getContacts = () => {
-    fetch("http://localhost:3333/api/1.0.0/contacts", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "X-Authorization": this.context.UserData.sessionToken,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else if (response.status === 401) {
-          throw "Unauthorised";
-        } else {
-          throw "Server error";
-        }
-      })
-      .then((json) => {
-        this.setState({ contacts: json });
-      })
+  showBlock = () => {
+    this.getContacts(!this.state.blocked)
+    this.setState({blocked: !this.state.blocked})
 
-      .catch((error) => {
-        console.log(error);
-      });
+  }
+
+  getContacts = (blocked) => {
+    if(!blocked){
+      fetch("http://localhost:3333/api/1.0.0/contacts", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "X-Authorization": this.context.UserData.sessionToken,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else if (response.status === 401) {
+            throw "Unauthorised";
+          } else {
+            throw "Server error";
+          }
+        })
+        .then((json) => {
+          this.setState({ contacts: json });
+        })
+
+        .catch((error) => {
+          console.log(error);
+        });
+      }else{
+        fetch("http://localhost:3333/api/1.0.0/blocked", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "X-Authorization": this.context.UserData.sessionToken,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else if (response.status === 401) {
+            throw "Unauthorised";
+          } else {
+            throw "Server error";
+          }
+        })
+        .then((json) => {
+          this.setState({ contacts: json });
+        })
+
+        .catch((error) => {
+          console.log(error);
+        });
+      }
   };
 
   componentDidMount() {
-    this.getContacts();
+    this.getContacts(false);
   }
 
 
 
   render() {
     this.props.navigation.addListener('focus', (e) => {
-     this.getContacts()
+     this.getContacts(false)
     });
     return (
       <View style={globalStyle.pageContainer}>
-        <Text style={{width: '90%', textAlign:'left', fontSize:30, fontWeight:'bold'}}>
-          Your Contacts
+        
+        <View style={{flexDirection:'row', width: '90%', alignItems:'center'}}>
+        <Text style={{textAlign:'left', fontSize:30, fontWeight:'bold',flex:10}}>
+          {this.state.blocked ? 'Blocked Contacts':'Your Contacts'}
         </Text>
+        <TouchableOpacity style={{flex: 1}} onPress = {()=>{this.showBlock()}}>
+          {this.state.blocked ? <Ionicons name='thumbs-down-outline' size={30}/> : <Ionicons name='thumbs-up-outline' size={30}/>}
+        </TouchableOpacity>
+        </View>
        
           <FlatList
             data={this.state.contacts}
@@ -71,6 +111,7 @@ class DisplayContacts extends Component {
                 given_name={item.first_name}
                 user_id={item.user_id}
                 key={item.user_id}
+                contactBlocked = {this.state.blocked}
               />
               )
             }}
