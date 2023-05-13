@@ -1,18 +1,7 @@
-
 import React, { Component } from "react";
-import {
-  Text,
-  TextInput,
-  View,
-  Button,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-//import { useNavigation } from '@react-navigation/native';
+import { View } from "react-native";
 import styles from "../styles/globalStyle";
-import DisplayContacts from '../components/DisplayContacts';
-import AddContact from "../components/AddContact";
+import DisplayContacts from "../components/DisplayContacts";
 
 class Contacts extends Component {
   constructor(props) {
@@ -22,10 +11,10 @@ class Contacts extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <DisplayContacts navigation = {this.props.navigation}/>
+        <DisplayContacts navigation={this.props.navigation} />
       </View>
     );
   }
 }
 
-export default Contacts
+export default Contacts;

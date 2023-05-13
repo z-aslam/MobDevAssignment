@@ -1,30 +1,20 @@
-import React, { Component, useState } from 'react';
-import { Text, TextInput, View, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import SearchContacts from '../components/SearchContacts';
-import styles from '../styles/globalStyle';
-
-
-
+import React, { Component } from "react";
+import { View } from "react-native";
+import SearchContacts from "../components/SearchContacts";
+import styles from "../styles/globalStyle";
 
 class Search extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-
   }
-
 
   render() {
-
     return (
-
-        <View style={styles.container}> 
-            <SearchContacts navigation ={this.props.navigation}/>
-        </View>
-  
-      
+      <View style={styles.container}>
+        <SearchContacts navigation={this.props.navigation} />
+      </View>
     );
   }
-
 }
 
-export default Search
+export default Search;

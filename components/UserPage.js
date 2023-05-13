@@ -1,34 +1,25 @@
-import React, { Component, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Alert,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { Component, createRef } from "react";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import { UserContext } from "../UserContext";
 import globalStyle from "../styles/globalStyle";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { colours } from "../styles/colours";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
 import styles from "../styles/globalStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { Camera } from "expo-camera";
 
 class UserPage extends Component {
   static contextType = UserContext;
   constructor(props) {
     super(props);
+    this.cameraRef = createRef(null);
     this.state = {
       imageURI: "",
       userData: {
         first_name: "",
         email: "",
+        takingPhoto: false,
+        camera: {},
       },
     };
   }
@@ -36,9 +27,40 @@ class UserPage extends Component {
   handleLogout = async () => {
     await AsyncStorage.removeItem("userID");
     await AsyncStorage.removeItem("sessionToken");
-    this.context.updateData()
+    this.context.updateData();
   };
 
+  handleTakePhoto = () => {
+    console.log("take photo");
+    this.setState({ takingPhoto: true });
+    if (this.state.takingPhoto) {
+      const options = { quality: 0.5, base64: true };
+
+      this.cameraRef.current.takePictureAsync(options).then((response) => {
+        fetch(`${response.uri}`)
+          .then((res) => res.blob())
+          .then((blob) => {
+            fetch(
+              `http://localhost:3333/api/1.0.0/user/${this.context.UserData.userID}/photo`,
+              {
+                method: "POST",
+                headers: {
+                  Accept: "image/png",
+                  "X-Authorization": this.context.UserData.sessionToken,
+                  "Content-Type": "image/png",
+                },
+                body: blob,
+              }
+            ).then((r) => {
+              this.setState({
+                imageURI: response.uri,
+                takingPhoto: false,
+              });
+            });
+          });
+      });
+    }
+  };
 
   componentDidMount() {
     fetch(
@@ -122,21 +144,36 @@ class UserPage extends Component {
   render() {
     return (
       <View style={[globalStyle.pageContainer]}>
-        <TouchableOpacity onPress={this.handleImageChange}>
-          {/* <Ionicons name='add-circle' color={colours.lighterGrey} size={200}/> */}
-          <Image
-            source={{
-              uri: this.state.imageURI,
-            }}
-            style={{
-              height: 250,
-              width: 250,
-              borderRadius: 250,
-              margin: 20,
-
-            }}
-          />
-        </TouchableOpacity>
+        {!this.state.takingPhoto ? (
+          <TouchableOpacity onPress={this.handleImageChange}>
+            <Image
+              source={{
+                uri: this.state.imageURI,
+              }}
+              style={{
+                height: 250,
+                width: 250,
+                borderRadius: 250,
+                margin: 20,
+              }}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View
+            style={{ height: 250, width: 250, borderRadius: 250, margin: 20 }}
+          >
+            <Camera
+              style={{
+                height: 250,
+                width: 250,
+                borderRadius: 250,
+                overflow: "hidden",
+              }}
+              ratio="1:1"
+              ref={this.cameraRef}
+            ></Camera>
+          </View>
+        )}
         <Text
           style={{ fontSize: 35, fontWeight: "bold", color: colours.black }}
         >
@@ -149,15 +186,40 @@ class UserPage extends Component {
           {this.state.userData.email}
         </Text>
 
-        <TouchableOpacity style={styles.mainAppButton}
+        <TouchableOpacity
+          style={styles.mainAppButton}
           onPress={() => {
             this.handleLogout();
           }}
         >
-          <Text 
-              style = {styles.buttonText}
-              numberOfLines = {1}
-              > Log Out</Text>
+          <Text style={styles.buttonText} numberOfLines={1}>
+            {" "}
+            Log Out
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.mainAppButton}
+          onPress={() => {
+            this.handleImageChange();
+          }}
+        >
+          <Text style={styles.buttonText} numberOfLines={1}>
+            {" "}
+            Upload Image
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.mainAppButton}
+          onPress={() => {
+            this.handleTakePhoto();
+          }}
+        >
+          <Text style={styles.buttonText} numberOfLines={1}>
+            {" "}
+            Take Photo
+          </Text>
         </TouchableOpacity>
       </View>
     );

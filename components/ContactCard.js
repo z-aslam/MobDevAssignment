@@ -1,13 +1,5 @@
-import React, { Component, useContext, useState } from "react";
-import {
-  Text,
-  TextInput,
-  View,
-  Button,
-  Alert,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { Component } from "react";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import { UserContext } from "../UserContext";
 import { StyleSheet } from "react-native";
 import { colours } from "../styles/colours";
@@ -29,11 +21,11 @@ class ContactCard extends Component {
       errorText: "",
       imageURI: "",
       contactAddedToChat: this.props.inChat,
-      contactBlocked: this.props.contactBlocked
+      contactBlocked: this.props.contactBlocked,
     };
   }
 
-  componentDidMount() {  
+  componentDidMount() {
     fetch("http://localhost:3333/api/1.0.0/contacts", {
       method: "GET",
       headers: {
@@ -97,26 +89,26 @@ class ContactCard extends Component {
             case 200:
               this.setState({ contactAdded: true });
               this.props.toast.show("Contact Added", {
-                type: "success"
+                type: "success",
               });
               break;
             case 400:
               this.props.toast.show("You cannot add yourself as a contact", {
-                type: "warning"
+                type: "warning",
               });
               break;
             case 401:
               this.props.toast.show("Unauthorized", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 404:
               this.props.toast.show("User not found - Server error", {
-                type: "danger"
+                type: "danger",
               });
             case 500:
               this.props.toast.show("Server error", {
-                type: "danger"
+                type: "danger",
               });
               break;
           }
@@ -137,26 +129,26 @@ class ContactCard extends Component {
             case 200:
               this.setState({ contactAdded: false });
               this.props.toast.show("Contact Removed", {
-                type: "success"
+                type: "success",
               });
               break;
             case 400:
               this.props.toast.show("You cannot remove yourself as a contact", {
-                type: "warning"
+                type: "warning",
               });
               break;
             case 401:
               this.props.toast.show("Unauthorized", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 404:
               this.props.toast.show("User not found - Server error", {
-                type: "danger"
+                type: "danger",
               });
             case 500:
               this.props.toast.show("Server error", {
-                type: "danger"
+                type: "danger",
               });
               break;
           }
@@ -180,32 +172,32 @@ class ContactCard extends Component {
             case 200:
               this.setState({ contactAddedToChat: true });
               this.props.toast.show("Contact added to chat", {
-                type: "success"
+                type: "success",
               });
               break;
             case 400:
               this.props.toast.show("Bad Request", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 401:
               this.props.toast.show("Unauthorized", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 403:
               this.props.toast.show("Forbidden", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 404:
               this.props.toast.show("Not Found", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 500:
               this.props.toast.show("Server error", {
-                type: "danger"
+                type: "danger",
               });
               break;
           }
@@ -226,32 +218,32 @@ class ContactCard extends Component {
             case 200:
               this.setState({ contactAddedToChat: false });
               this.props.toast.show("Contact removed from chat", {
-                type: "success"
+                type: "success",
               });
               break;
             case 400:
               this.props.toast.show("Bad Request", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 401:
               this.props.toast.show("Unauthorized", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 403:
               this.props.toast.show("Forbidden", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 404:
               this.props.toast.show("Not Found", {
-                type: "danger"
+                type: "danger",
               });
               break;
             case 500:
               this.props.toast.show("Server error", {
-                type: "danger"
+                type: "danger",
               });
               break;
           }
@@ -261,88 +253,88 @@ class ContactCard extends Component {
   };
 
   handleBlock = () => {
-    if(!this.state.contactBlocked){
-    fetch(
-      `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/block`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "X-Authorization": this.context.UserData.sessionToken,
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((response) => {
-      switch (response.status) {
-        case 200:
-          this.setState({ contactAdded: false, contactBlocked: true });
-          this.props.toast.show("Contact Blocked", {
-            type: "success"
-          });
-          break;
-        case 400:
-          this.props.toast.show("You cannot block yourself", {
-            type: "warning"
-          });
-          break;
-        case 401:
-          this.props.toast.show("Unauthorized", {
-            type: "danger"
-          });
-          break;
-        case 404:
-          this.props.toast.show("User not found - Server error", {
-            type: "danger"
-          });
-        case 500:
-          this.props.toast.show("Server error", {
-            type: "danger"
-          });
-          break;
-      }
-    });
-  }else{
-    fetch(
-      `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/block`,
-      {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "X-Authorization": this.context.UserData.sessionToken,
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((response) => {
-      switch (response.status) {
-        case 200:
-          this.setState({ contactAdded: false, contactBlocked: false });
-          this.props.toast.show("Contact UnBlocked", {
-            type: "success"
-          });
-          break;
-        case 400:
-          this.props.toast.show("You cannot unblock yourself", {
-            type: "warning"
-          });
-          break;
-        case 401:
-          this.props.toast.show("Unauthorized", {
-            type: "danger"
-          });
-          break;
-        case 404:
-          this.props.toast.show("User not found - Server error", {
-            type: "danger"
-          });
-        case 500:
-          this.props.toast.show("Server error", {
-            type: "danger"
-          });
-          break;
-      }
-    });
-  }
-  }
+    if (!this.state.contactBlocked) {
+      fetch(
+        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/block`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "X-Authorization": this.context.UserData.sessionToken,
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((response) => {
+        switch (response.status) {
+          case 200:
+            this.setState({ contactAdded: false, contactBlocked: true });
+            this.props.toast.show("Contact Blocked", {
+              type: "success",
+            });
+            break;
+          case 400:
+            this.props.toast.show("You cannot block yourself", {
+              type: "warning",
+            });
+            break;
+          case 401:
+            this.props.toast.show("Unauthorized", {
+              type: "danger",
+            });
+            break;
+          case 404:
+            this.props.toast.show("User not found - Server error", {
+              type: "danger",
+            });
+          case 500:
+            this.props.toast.show("Server error", {
+              type: "danger",
+            });
+            break;
+        }
+      });
+    } else {
+      fetch(
+        `http://localhost:3333/api/1.0.0/user/${this.props.user_id}/block`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "X-Authorization": this.context.UserData.sessionToken,
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((response) => {
+        switch (response.status) {
+          case 200:
+            this.setState({ contactAdded: false, contactBlocked: false });
+            this.props.toast.show("Contact UnBlocked", {
+              type: "success",
+            });
+            break;
+          case 400:
+            this.props.toast.show("You cannot unblock yourself", {
+              type: "warning",
+            });
+            break;
+          case 401:
+            this.props.toast.show("Unauthorized", {
+              type: "danger",
+            });
+            break;
+          case 404:
+            this.props.toast.show("User not found - Server error", {
+              type: "danger",
+            });
+          case 500:
+            this.props.toast.show("Server error", {
+              type: "danger",
+            });
+            break;
+        }
+      });
+    }
+  };
   render() {
     return (
       <View style={style.container}>
@@ -403,19 +395,29 @@ class ContactCard extends Component {
               />
             )}
           </TouchableOpacity>
-          {!this.props.chat_id && (<TouchableOpacity onPress={this.handleBlock}>
-            {!this.state.contactBlocked ? (<Ionicons name = 'eye-off-outline' color = {colours.black} size={24}/>) : (<Ionicons name = 'eye-outline' color = {colours.black} size={24}/>) }
-          </TouchableOpacity>)}
+          {!this.props.chat_id && (
+            <TouchableOpacity onPress={this.handleBlock}>
+              {!this.state.contactBlocked ? (
+                <Ionicons
+                  name="eye-off-outline"
+                  color={colours.black}
+                  size={24}
+                />
+              ) : (
+                <Ionicons name="eye-outline" color={colours.black} size={24} />
+              )}
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     );
   }
 }
 
-const containsObject = (user_id, list) => {
-  var i;
+const containsObject = (userID, list) => {
+  let i;
   for (i = 0; i < list.length; i++) {
-    if (list[i].user_id === user_id) {
+    if (list[i].user_id === userID) {
       return true;
     }
   }

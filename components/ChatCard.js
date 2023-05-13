@@ -1,13 +1,9 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import {
   Text,
   TextInput,
   View,
-  Button,
-  Alert,
   TouchableOpacity,
-  Image,
-  ScrollView,
   FlatList,
 } from "react-native";
 import { UserContext } from "../UserContext";
@@ -24,7 +20,6 @@ const ContextChatCard = (props) => {
   return <ChatCard toast={toast} {...props} />;
 };
 
-
 class ChatCard extends Component {
   static contextType = UserContext;
   constructor(props) {
@@ -37,7 +32,7 @@ class ChatCard extends Component {
       addContact: false,
       contacts: [],
       members: [],
-      titleText: this.props.name
+      titleText: this.props.name,
     };
   }
 
@@ -115,33 +110,33 @@ class ChatCard extends Component {
       .then((response) => {
         switch (response.status) {
           case 200:
-             return response.json();
+            return response.json();
           case 400:
             this.props.toast.show("Bad Request", {
-              type: "danger"
+              type: "danger",
             });
             break;
           case 401:
             this.props.toast.show("Unauthorized", {
-              type: "danger"
+              type: "danger",
             });
             break;
           case 403:
             this.props.toast.show("Forbidden", {
-              type: "danger"
+              type: "danger",
             });
             break;
           case 404:
             this.props.toast.show("Not Found", {
-              type: "danger"
+              type: "danger",
             });
             break;
           case 500:
             this.props.toast.show("Server error", {
-              type: "danger"
+              type: "danger",
             });
             break;
-          }
+        }
       })
       .then((json) => {
         console.log(json);
@@ -174,46 +169,48 @@ class ChatCard extends Component {
       });
   };
   handleEdit = () => {
-    fetch(
-        `http://localhost:3333/api/1.0.0/chat/${this.props.chat_id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "X-Authorization": this.context.UserData.sessionToken,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: this.state.titleText
-          })
-        }
-      ).then((response) => {
-        switch (response.status) {
-          case 200:
-            this.props.toast.show("Chat title edited", {
-              type: "success"
-            });
-            break;
-          case 401:
-            this.props.toast.show("Unauthorized", {
-              type: "danger"
-            });
-            break;
-          case 404:
-            this.props.toast.show("Not found", {
-              type: "danger"
-            });
-          case 500:
-            this.props.toast.show("Server error", {
-              type: "danger"
-            });
-            break;
-        }
-    })
-  }
+    fetch(`http://localhost:3333/api/1.0.0/chat/${this.props.chat_id}`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "X-Authorization": this.context.UserData.sessionToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: this.state.titleText,
+      }),
+    }).then((response) => {
+      switch (response.status) {
+        case 200:
+          this.props.toast.show("Chat title edited", {
+            type: "success",
+          });
+          break;
+        case 401:
+          this.props.toast.show("Unauthorized", {
+            type: "danger",
+          });
+          break;
+        case 404:
+          this.props.toast.show("Not found", {
+            type: "danger",
+          });
+        case 500:
+          this.props.toast.show("Server error", {
+            type: "danger",
+          });
+          break;
+      }
+    });
+  };
   componentDidMount() {
     this.getMessages();
     this.getContacts();
+    {
+      setInterval(() => {
+        this.getMessages();
+      }, 1000);
+    }
   }
   render() {
     return (
@@ -225,7 +222,6 @@ class ChatCard extends Component {
             width: "100%",
             gap: 10,
           }}
-          
         >
           <TouchableOpacity
             style={{
@@ -247,9 +243,15 @@ class ChatCard extends Component {
             />
           </TouchableOpacity>
           <View style={{ width: "70%", marginVertical: 10, gap: 5, flex: 8 }}>
-            <TextInput style={{ fontWeight: "bold", fontSize: 17 }} defaultValue={this.props.name} onChangeText={(v)=>{this.setState({titleText: v})}} onSubmitEditing={this.handleEdit}/>
-              
-            
+            <TextInput
+              style={{ fontWeight: "bold", fontSize: 17 }}
+              defaultValue={this.props.name}
+              onChangeText={(v) => {
+                this.setState({ titleText: v });
+              }}
+              onSubmitEditing={this.handleEdit}
+            />
+
             <Text style={{ fontSize: 15, fontStyle: "italic" }}>
               {this.state.members.length < 4
                 ? this.state.members.map((text) => {
@@ -261,10 +263,11 @@ class ChatCard extends Component {
                 : this.state.members.length + " Members"}
             </Text>
           </View>
-          <TouchableOpacity style={{ flex: 1 }}
-          onPress={() => {
-            this.setState({ chatOpened: !this.state.chatOpened });
-          }}
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => {
+              this.setState({ chatOpened: !this.state.chatOpened });
+            }}
           >
             <Ionicons
               name={
@@ -293,7 +296,7 @@ class ChatCard extends Component {
                 inverted={-1}
                 renderItem={({ item }) => {
                   if (item.message_id) {
-                    let date = new Date(item.timestamp);
+                    const date = new Date(item.timestamp);
                     let hours = date.getHours();
                     hours = hours < 10 ? "0" + hours : hours;
                     let minutes = date.getMinutes();
@@ -303,11 +306,11 @@ class ChatCard extends Component {
 
                     return (
                       <MessageBubble
-                      toast = {this.props.toast}
-                        chat_id = {this.props.chat_id}
+                        toast={this.props.toast}
+                        chat_id={this.props.chat_id}
                         author={item.author.first_name}
                         message={item.message}
-                        message_id = {item.message_id}
+                        message_id={item.message_id}
                         timestamp={hours + ":" + minutes + ":" + seconds}
                         user_id={item.author.user_id}
                         key={item.message_id}
@@ -385,10 +388,10 @@ class ChatCard extends Component {
     );
   }
 }
-const containsObject = (user_id, list) => {
-  var i;
+const containsObject = (userID, list) => {
+  let i;
   for (i = 0; i < list.length; i++) {
-    if (list[i].user_id === user_id) {
+    if (list[i].user_id === userID) {
       return true;
     }
   }

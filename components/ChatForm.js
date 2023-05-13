@@ -4,26 +4,20 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  FlatList,
   ScrollView,
 } from "react-native";
 import styles from "../styles/globalStyle";
-import BigLogo from "../components/BigLogo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { UserContext } from "../UserContext";
 import ContextChatCard from "./ChatCard";
 import globalStyle from "../styles/globalStyle";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useToast } from "react-native-toast-notifications"; 
-
-
+import { useToast } from "react-native-toast-notifications";
 
 const ChatForm = (props) => {
   const toast = useToast();
   return <ChatFormChild toast={toast} {...props} />;
 };
-
-
 
 class ChatFormChild extends Component {
   static contextType = UserContext;

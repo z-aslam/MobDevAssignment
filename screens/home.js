@@ -1,15 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { Component } from "react";
-import {
-  Text,
-  TextInput,
-  View,
-  Button,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-//import { useNavigation } from '@react-navigation/native';
+import { Text, View, TouchableOpacity } from "react-native";
 import styles from "../styles/globalStyle";
 import { UserContext } from "../UserContext";
 
@@ -22,9 +13,8 @@ class Home extends Component {
   handleLogout = async () => {
     await AsyncStorage.removeItem("userID");
     await AsyncStorage.removeItem("sessionToken");
-    this.context.updateData()
+    this.context.updateData();
   };
-
 
   render() {
     return (

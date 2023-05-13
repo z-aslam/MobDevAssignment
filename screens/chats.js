@@ -1,15 +1,6 @@
-
 import React, { Component } from "react";
-import {
-  Text,
-  TextInput,
-  View,
-  Button,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-//import { useNavigation } from '@react-navigation/native';
+import { View } from "react-native";
+
 import styles from "../styles/globalStyle";
 import ChatForm from "../components/ChatForm";
 
@@ -21,10 +12,10 @@ class Chats extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ChatForm/>
+        <ChatForm />
       </View>
     );
   }
 }
 
-export default Chats
+export default Chats;
