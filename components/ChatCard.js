@@ -17,6 +17,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import globalStyle from "../styles/globalStyle";
 import MessageBubble from "./MessageBubble";
 import ContactCard from "./ContactCard";
+import { useToast } from "react-native-toast-notifications";
+
+const ContextChatCard = (props) => {
+  const toast = useToast();
+  return <ChatCard toast={toast} {...props} />;
+};
+
 
 class ChatCard extends Component {
   static contextType = UserContext;
@@ -29,7 +36,7 @@ class ChatCard extends Component {
       messageText: "",
       addContact: false,
       contacts: [],
-      members: []
+      members: [],
     };
   }
 
@@ -54,15 +61,40 @@ class ChatCard extends Component {
             this.getMessages();
             break;
           case 400:
-            throw "bad request";
+            this.props.toast.show("Bad Request", {
+              type: "danger",
+              placement: "top",
+              duration: 2000,
+            });
+            break;
           case 401:
-            throw "unauthorized";
+            this.props.toast.show("Unauthorized", {
+              type: "danger",
+              placement: "top",
+              duration: 2000,
+            });
+            break;
           case 403:
-            throw "forbidden";
+            this.props.toast.show("Forbidden", {
+              type: "danger",
+              placement: "top",
+              duration: 2000,
+            });
+            break;
           case 404:
-            throw "Not Found";
+            this.props.toast.show("Not Found", {
+              type: "danger",
+              placement: "top",
+              duration: 2000,
+            });
+            break;
           case 500:
-            throw "server error";
+            this.props.toast.show("Server error", {
+              type: "danger",
+              placement: "top",
+              duration: 2000,
+            });
+            break;
         }
       })
       .catch((err) => {
@@ -80,16 +112,38 @@ class ChatCard extends Component {
       },
     })
       .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else if (response.status === 401) {
-          throw "Unauthorised";
-        } else {
-          throw "Server error";
-        }
+        switch (response.status) {
+          case 200:
+             return response.json();
+          case 400:
+            this.props.toast.show("Bad Request", {
+              type: "danger"
+            });
+            break;
+          case 401:
+            this.props.toast.show("Unauthorized", {
+              type: "danger"
+            });
+            break;
+          case 403:
+            this.props.toast.show("Forbidden", {
+              type: "danger"
+            });
+            break;
+          case 404:
+            this.props.toast.show("Not Found", {
+              type: "danger"
+            });
+            break;
+          case 500:
+            this.props.toast.show("Server error", {
+              type: "danger"
+            });
+            break;
+          }
       })
       .then((json) => {
-        console.log(json)
+        console.log(json);
         this.setState({ contacts: json });
       })
 
@@ -111,7 +165,7 @@ class ChatCard extends Component {
         return response.json();
       })
       .then((data) => {
-        this.setState({members: data.members})
+        this.setState({ members: data.members });
         this.setState({ messages: data.messages });
       })
       .catch((err) => {
@@ -125,7 +179,7 @@ class ChatCard extends Component {
   }
   render() {
     return (
-      <View style={style.container}>
+      <View style={[style.container]}>
         <TouchableOpacity
           style={{
             flexDirection: "row",
@@ -144,21 +198,31 @@ class ChatCard extends Component {
               height: 45,
               borderRadius: 45,
               margin: 5,
+              flex: 2,
             }}
           >
-            <Ionicons name="chatbubbles-outline" size={40} color={colours.green}/>
+            <Ionicons
+              name="chatbubbles-outline"
+              size={40}
+              color={colours.green}
+            />
           </View>
-          <View style={{ width: "70%", marginVertical: 10, gap: 5 }}>
+          <View style={{ width: "70%", marginVertical: 10, gap: 5, flex: 10 }}>
             <Text style={{ fontWeight: "bold", fontSize: 17 }}>
               {this.props.name}
             </Text>
             <Text style={{ fontSize: 15, fontStyle: "italic" }}>
-            { this.state.members.length < 4 ? (this.state.members.map((text)=>{return ((this.state.members.indexOf(text) < this.state.members.length - 1 ? (text.first_name + ', ') : (text.first_name)))})) : this.state.members.length + ' Members'}
-
-            
+              {this.state.members.length < 4
+                ? this.state.members.map((text) => {
+                    return this.state.members.indexOf(text) <
+                      this.state.members.length - 1
+                      ? text.first_name + ", "
+                      : text.first_name;
+                  })
+                : this.state.members.length + " Members"}
             </Text>
           </View>
-          <View>
+          <View style={{ flex: 1 }}>
             <Ionicons
               name={
                 this.state.chatOpened
@@ -169,6 +233,7 @@ class ChatCard extends Component {
             />
           </View>
         </TouchableOpacity>
+
         {this.state.chatOpened && (
           <View
             style={{
@@ -178,53 +243,57 @@ class ChatCard extends Component {
               justifyContent: "flex-end",
             }}
           >
-            {!this.state.addContact ? (<FlatList
-              data={this.state.messages}
-              style={{ width: "100%", marginVertical: 20,maxHeight: 250 }}
-              inverted={-1}
-              renderItem={({item}) => {
-                if (item.message_id) {
-                  let date = new Date(item.timestamp);
-                  let hours = date.getHours();
-                  hours = hours < 10 ? '0' + hours : hours
-                  let minutes = date.getMinutes();
-                  minutes = minutes < 10 ? '0' + minutes : minutes
-                  let seconds = date.getSeconds();
-                  seconds = seconds < 10 ? '0' + seconds : seconds
+            {!this.state.addContact ? (
+              <FlatList
+                data={this.state.messages}
+                style={{ width: "100%", marginVertical: 20, maxHeight: 250 }}
+                inverted={-1}
+                renderItem={({ item }) => {
+                  if (item.message_id) {
+                    let date = new Date(item.timestamp);
+                    let hours = date.getHours();
+                    hours = hours < 10 ? "0" + hours : hours;
+                    let minutes = date.getMinutes();
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    let seconds = date.getSeconds();
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                  return (
-                    <MessageBubble
-                      author={item.author.first_name}
-                      message={item.message}
-                      timestamp={hours + ":" + minutes + ":" + seconds}
-                      user_id={item.author.user_id}
-                      key={item.message_id}
-                    />
-                  );
-                }
-            }
-              }
-            />) : (
+                    return (
+                      <MessageBubble
+                        author={item.author.first_name}
+                        message={item.message}
+                        timestamp={hours + ":" + minutes + ":" + seconds}
+                        user_id={item.author.user_id}
+                        key={item.message_id}
+                      />
+                    );
+                  }
+                }}
+              />
+            ) : (
               <FlatList
                 data={this.state.contacts}
-                style={{ width: "100%", marginVertical: 20,maxHeight: 250 }}
-                renderItem={({item})=>{
-                  if(item.user_id != this.props.creator_id){
-                    return( <ContactCard
-                      email={item.email}
-                      family_name={item.last_name}
-                      given_name={item.first_name}
-                      user_id={item.user_id}
-                      key={item.user_id}
-                      chat_id={this.props.chat_id}
-                      inChat = {containsObject(item.user_id,this.state.members)}
-                    />)
-                  }}
+                style={{ width: "100%", marginVertical: 20, maxHeight: 250 }}
+                renderItem={({ item }) => {
+                  if (item.user_id != this.props.creator_id) {
+                    return (
+                      <ContactCard
+                        email={item.email}
+                        family_name={item.last_name}
+                        given_name={item.first_name}
+                        user_id={item.user_id}
+                        key={item.user_id}
+                        chat_id={this.props.chat_id}
+                        inChat={containsObject(
+                          item.user_id,
+                          this.state.members
+                        )}
+                      />
+                    );
                   }
-                 
+                }}
               />
             )}
-
 
             <View style={{ width: "100%", flexDirection: "row", gap: 10 }}>
               <TextInput
@@ -245,17 +314,23 @@ class ChatCard extends Component {
               <TouchableOpacity
                 style={{ flex: 1 }}
                 onPress={() => {
-                  
-                  if(this.state.addContact) { 
-                    this.getMessages()
-                  }else{
-                    this.getContacts()
+                  if (this.state.addContact) {
+                    this.getMessages();
+                  } else {
+                    this.getContacts();
                   }
-                  
-                  this.setState({addContact: !this.state.addContact})
+
+                  this.setState({ addContact: !this.state.addContact });
                 }}
               >
-                <Ionicons name={!this.state.addContact ? "people-circle-outline" : "close-circle-outline"} size={30} />
+                <Ionicons
+                  name={
+                    !this.state.addContact
+                      ? "people-circle-outline"
+                      : "close-circle-outline"
+                  }
+                  size={30}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -295,4 +370,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default ChatCard;
+export default ContextChatCard;

@@ -1,11 +1,11 @@
 import React, { Component, useState } from 'react';
-import { Text, TextInput, View, Button, Alert, ScrollView } from 'react-native';
+import { Text, TextInput, View, Button, Alert, ScrollView, FlatList } from 'react-native';
 import globalStyle from '../styles/globalStyle';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-web';
 import { colours } from '../styles/colours';
 import { UserContext } from '../UserContext';
-import ContactCard from './ContactCard';
+import ContextContactCard from './ContactCard';
 
 class DisplayContacts extends Component {
   static contextType = UserContext;
@@ -59,19 +59,22 @@ class DisplayContacts extends Component {
         <Text style={{width: '90%', textAlign:'left', fontSize:30, fontWeight:'bold'}}>
           Your Contacts
         </Text>
-        <ScrollView style={{ width: "100%", marginTop: 10, height: "100%" }}>
-          {this.state.contacts.map(
-            ({ email, first_name, last_name, user_id }) => (
-              <ContactCard
-                email={email}
-                family_name={last_name}
-                given_name={first_name}
-                user_id={user_id}
-                key={user_id}
+       
+          <FlatList
+            data={this.state.contacts}
+            style={{ width: "100%", marginTop: 10, height: "100%" }}
+            renderItem={({item}) => {
+              return(
+                <ContextContactCard
+                email={item.email}
+                family_name={item.last_name}
+                given_name={item.first_name}
+                user_id={item.user_id}
+                key={item.user_id}
               />
-            )
-          )}
-        </ScrollView>
+              )
+            }}
+          />
       </View>
     );
   }

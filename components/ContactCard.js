@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useContext, useState } from "react";
 import {
   Text,
   TextInput,
@@ -12,6 +12,12 @@ import { UserContext } from "../UserContext";
 import { StyleSheet } from "react-native";
 import { colours } from "../styles/colours";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useToast } from "react-native-toast-notifications";
+
+const ContextContactCard = (props) => {
+  const toast = useToast();
+  return <ContactCard toast={toast} {...props} />;
+};
 
 class ContactCard extends Component {
   static contextType = UserContext;
@@ -26,7 +32,7 @@ class ContactCard extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount() {  
     fetch("http://localhost:3333/api/1.0.0/contacts", {
       method: "GET",
       headers: {
@@ -89,19 +95,28 @@ class ContactCard extends Component {
           switch (response.status) {
             case 200:
               this.setState({ contactAdded: true });
+              this.props.toast.show("Contact Added", {
+                type: "success"
+              });
               break;
             case 400:
-              this.setState({
-                errorText: "You can't add yourself as a contact",
+              this.props.toast.show("You cannot add yourself as a contact", {
+                type: "warning"
               });
               break;
             case 401:
-              this.setState({ errorText: "Unauthorized" });
+              this.props.toast.show("Unauthorized", {
+                type: "danger"
+              });
               break;
             case 404:
-              this.setState({ errorText: "User not found - server error" });
+              this.props.toast.show("User not found - Server error", {
+                type: "danger"
+              });
             case 500:
-              this.setState({ errorText: "Server error" });
+              this.props.toast.show("Server error", {
+                type: "danger"
+              });
               break;
           }
         });
@@ -120,19 +135,28 @@ class ContactCard extends Component {
           switch (response.status) {
             case 200:
               this.setState({ contactAdded: false });
+              this.props.toast.show("Contact Removed", {
+                type: "success"
+              });
               break;
             case 400:
-              this.setState({
-                errorText: "You can't remove yourself as a contact",
+              this.props.toast.show("You cannot remove yourself as a contact", {
+                type: "warning"
               });
               break;
             case 401:
-              this.setState({ errorText: "Unauthorized" });
+              this.props.toast.show("Unauthorized", {
+                type: "danger"
+              });
               break;
             case 404:
-              this.setState({ errorText: "User not found - server error" });
+              this.props.toast.show("User not found - Server error", {
+                type: "danger"
+              });
             case 500:
-              this.setState({ errorText: "Server error" });
+              this.props.toast.show("Server error", {
+                type: "danger"
+              });
               break;
           }
         });
@@ -150,21 +174,39 @@ class ContactCard extends Component {
             },
           }
         ).then((response) => {
-          console.log(response)
+          console.log(response);
           switch (response.status) {
             case 200:
               this.setState({ contactAddedToChat: true });
+              this.props.toast.show("Contact added to chat", {
+                type: "success"
+              });
               break;
             case 400:
-              throw "bad request";
+              this.props.toast.show("Bad Request", {
+                type: "danger"
+              });
+              break;
             case 401:
-              throw "unauthorized";
+              this.props.toast.show("Unauthorized", {
+                type: "danger"
+              });
+              break;
             case 403:
-              throw "forbidden";
+              this.props.toast.show("Forbidden", {
+                type: "danger"
+              });
+              break;
             case 404:
-              throw "Not Found";
+              this.props.toast.show("Not Found", {
+                type: "danger"
+              });
+              break;
             case 500:
-              throw "server error";
+              this.props.toast.show("Server error", {
+                type: "danger"
+              });
+              break;
           }
         });
       } else {
@@ -182,17 +224,35 @@ class ContactCard extends Component {
           switch (response.status) {
             case 200:
               this.setState({ contactAddedToChat: false });
+              this.props.toast.show("Contact removed from chat", {
+                type: "success"
+              });
               break;
             case 400:
-              throw "bad request";
+              this.props.toast.show("Bad Request", {
+                type: "danger"
+              });
+              break;
             case 401:
-              throw "unauthorized";
+              this.props.toast.show("Unauthorized", {
+                type: "danger"
+              });
+              break;
             case 403:
-              throw "forbidden";
+              this.props.toast.show("Forbidden", {
+                type: "danger"
+              });
+              break;
             case 404:
-              throw "Not Found";
+              this.props.toast.show("Not Found", {
+                type: "danger"
+              });
+              break;
             case 500:
-              throw "server error";
+              this.props.toast.show("Server error", {
+                type: "danger"
+              });
+              break;
           }
         });
       }
@@ -321,4 +381,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default ContactCard;
+export default ContextContactCard;
