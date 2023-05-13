@@ -16,6 +16,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { colours } from "../styles/colours";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import styles from "../styles/globalStyle";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 class UserPage extends Component {
   static contextType = UserContext;
@@ -29,6 +32,13 @@ class UserPage extends Component {
       },
     };
   }
+
+  handleLogout = async () => {
+    await AsyncStorage.removeItem("userID");
+    await AsyncStorage.removeItem("sessionToken");
+    this.context.updateData()
+  };
+
 
   componentDidMount() {
     fetch(
@@ -138,6 +148,17 @@ class UserPage extends Component {
         >
           {this.state.userData.email}
         </Text>
+
+        <TouchableOpacity style={styles.mainAppButton}
+          onPress={() => {
+            this.handleLogout();
+          }}
+        >
+          <Text 
+              style = {styles.buttonText}
+              numberOfLines = {1}
+              > Log Out</Text>
+        </TouchableOpacity>
       </View>
     );
   }

@@ -52,9 +52,9 @@ function BottomNav() {
           case 'Chats':
             iconName = focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'
             break;
-          case 'Settings':
-            iconName = focused ? 'settings' : 'settings-outline'
-            break;
+          // case 'Settings':
+          //   iconName = focused ? 'settings' : 'settings-outline'
+          //   break;
           case 'You':
             iconName = focused ? 'person' : 'person-outline'
             break;
@@ -65,12 +65,13 @@ function BottomNav() {
       tabBarActiveTintColor: colours.green,
       tabBarInactiveTintColor: colours.lightGrey
     })} >
+      <Tab.Screen name="You" component={ User } options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/>
+
       <Tab.Screen name="Search" component={ Search} options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/>
       <Tab.Screen name="Contacts" component={ Contacts } options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/>
-      <Tab.Screen name="You" component={ User } options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/>
       
       <Tab.Screen name="Chats" component={ Chats } options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/>
-      <Tab.Screen name="Settings" component={ Settings } options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/>
+      {/* <Tab.Screen name="Settings" component={ Settings } options={{ headerTitle: (props) => <LogoTitle {...props} /> }}/> */}
       
     </Tab.Navigator>
   );
