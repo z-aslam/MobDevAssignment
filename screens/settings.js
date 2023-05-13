@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import styles from "../styles/globalStyle";
 import { UserContext } from "../UserContext";
+import { colours } from "../styles/colours";
 
 class Settings extends Component {
   static contextType = UserContext;
@@ -18,7 +19,7 @@ class Settings extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colours.offWhite }]}>
         <Text> Settings </Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity

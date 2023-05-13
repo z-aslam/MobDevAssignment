@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import styles from "../styles/globalStyle";
 import UserPage from "../components/UserPage";
+import { colours } from "../styles/colours";
 
 class User extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class User extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colours.offWhite }]}>
         <UserPage />
       </View>
     );

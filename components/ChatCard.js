@@ -244,7 +244,7 @@ class ChatCard extends Component {
           </TouchableOpacity>
           <View style={{ width: "70%", marginVertical: 10, gap: 5, flex: 8 }}>
             <TextInput
-              style={{ fontWeight: "bold", fontSize: 17 }}
+              style={{ fontWeight: "bold", fontSize: 17, color: colours.black }}
               defaultValue={this.props.name}
               onChangeText={(v) => {
                 this.setState({ titleText: v });
@@ -252,7 +252,13 @@ class ChatCard extends Component {
               onSubmitEditing={this.handleEdit}
             />
 
-            <Text style={{ fontSize: 15, fontStyle: "italic" }}>
+            <Text
+              style={{
+                fontSize: 15,
+                fontStyle: "italic",
+                color: colours.black,
+              }}
+            >
               {this.state.members.length < 4
                 ? this.state.members.map((text) => {
                     return this.state.members.indexOf(text) <
@@ -270,6 +276,7 @@ class ChatCard extends Component {
             }}
           >
             <Ionicons
+              color={colours.black}
               name={
                 this.state.chatOpened
                   ? "caret-up-outline"
@@ -358,7 +365,11 @@ class ChatCard extends Component {
                   this.handleMessageSend(this.state.messageText);
                 }}
               >
-                <Ionicons name="checkmark-outline" size={30} />
+                <Ionicons
+                  color={colours.black}
+                  name="checkmark-outline"
+                  size={30}
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ flex: 1 }}
@@ -373,6 +384,7 @@ class ChatCard extends Component {
                 }}
               >
                 <Ionicons
+                  color={colours.black}
                   name={
                     !this.state.addContact
                       ? "people-circle-outline"
@@ -416,6 +428,7 @@ const style = StyleSheet.create({
     elevation: 5,
     flexDirection: "column",
     alignItems: "center",
+    color: colours.black,
   },
 });
 

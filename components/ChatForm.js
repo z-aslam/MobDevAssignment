@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import styles from "../styles/globalStyle";
-
+import { colours } from "../styles/colours";
 import { UserContext } from "../UserContext";
 import ContextChatCard from "./ChatCard";
 import globalStyle from "../styles/globalStyle";
@@ -114,6 +114,7 @@ class ChatFormChild extends Component {
             fontSize: 30,
             fontWeight: "bold",
             flex: 1,
+            color: colours.black,
           }}
         >
           Your Chats
@@ -161,7 +162,11 @@ class ChatFormChild extends Component {
               this.handleChatCreate();
             }}
           >
-            <Ionicons name="add-circle-outline" size={35} />
+            <Ionicons
+              name="add-circle-outline"
+              size={35}
+              color={colours.black}
+            />
           </TouchableOpacity>
         </View>
         <View />

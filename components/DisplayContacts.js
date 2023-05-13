@@ -5,6 +5,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native-web";
 import { UserContext } from "../UserContext";
 import ContextContactCard from "./ContactCard";
+import { colours } from "../styles/colours";
+import { useToast } from "react-native-toast-notifications";
 
 const DisplayContacts = (props) => {
   const toast = useToast();
@@ -108,6 +110,7 @@ class DisplayContactChild extends Component {
               fontSize: 30,
               fontWeight: "bold",
               flex: 10,
+              color: colours.black,
             }}
           >
             {this.state.blocked ? "Blocked Contacts" : "Your Contacts"}
@@ -119,9 +122,17 @@ class DisplayContactChild extends Component {
             }}
           >
             {this.state.blocked ? (
-              <Ionicons name="thumbs-down-outline" size={30} />
+              <Ionicons
+                name="thumbs-down-outline"
+                size={30}
+                color={colours.black}
+              />
             ) : (
-              <Ionicons name="thumbs-up-outline" size={30} />
+              <Ionicons
+                name="thumbs-up-outline"
+                size={30}
+                color={colours.black}
+              />
             )}
           </TouchableOpacity>
         </View>

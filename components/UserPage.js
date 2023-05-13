@@ -20,6 +20,7 @@ class UserPage extends Component {
         email: "",
         takingPhoto: false,
         camera: {},
+        dark: false,
       },
     };
   }
@@ -31,7 +32,6 @@ class UserPage extends Component {
   };
 
   handleTakePhoto = () => {
-    console.log("take photo");
     this.setState({ takingPhoto: true });
     if (this.state.takingPhoto) {
       const options = { quality: 0.5, base64: true };
@@ -143,7 +143,12 @@ class UserPage extends Component {
   };
   render() {
     return (
-      <View style={[globalStyle.pageContainer]}>
+      <View
+        style={[
+          globalStyle.pageContainer,
+          { backgroundColor: colours.offWhite },
+        ]}
+      >
         {!this.state.takingPhoto ? (
           <TouchableOpacity onPress={this.handleImageChange}>
             <Image
@@ -221,6 +226,16 @@ class UserPage extends Component {
             Take Photo
           </Text>
         </TouchableOpacity>
+        {/* <TouchableOpacity
+          style={styles.mainAppButton}
+          onPress={() => {
+            this.context.updateDarkMode();
+          }}
+        >
+          <Text style={styles.buttonText} numberOfLines={1}>
+            Toggle Dark Mode
+          </Text>
+        </TouchableOpacity> */}
       </View>
     );
   }

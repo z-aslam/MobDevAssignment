@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from "react";
 import { TextInput, View, ScrollView } from "react-native";
 import globalStyle from "../styles/globalStyle";
@@ -60,13 +61,13 @@ class SearchContacts extends Component {
 
         <ScrollView style={{ width: "100%", marginTop: 10, height: "100%" }}>
           {this.state.contacts.map(
-            ({ email, familyName, givenName, userID }) => (
+            ({ email, family_name, given_name, user_id }) => (
               <ContactCard
                 email={email}
-                family_name={familyName}
-                given_name={givenName}
-                user_id={userID}
-                key={userID}
+                family_name={family_name}
+                given_name={given_name}
+                user_id={user_id}
+                key={user_id}
               />
             )
           )}

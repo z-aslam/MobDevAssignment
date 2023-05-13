@@ -437,7 +437,7 @@ const style = StyleSheet.create({
     width: "100%",
     padding: 10,
     borderRadius: 10,
-    shadowColor: "#000",
+    shadowColor: colours.black,
     shadowOffset: {
       width: 0,
       height: 2,
