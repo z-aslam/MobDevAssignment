@@ -17,14 +17,13 @@ export const UserProvider = ({ children }) => {
     green: "#5b1",
     darkGreen: "#4a2",
     lightGrey: "#777",
-    black: "#fdfdfd",
-    white: "#303134",
-    lighterGrey: "#AAA",
-    offWhite: "#202124",
-    error: "#FF0000",
+    black: "#000",
+    white: "#FFF",
+    lighterGrey: "#333",
+    offWhite: "#FDFDFD",
   });
 
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(0);
 
   const updateColour = () => {
     if (darkMode) {
@@ -34,7 +33,7 @@ export const UserProvider = ({ children }) => {
         lightGrey: "#777",
         black: "#000",
         white: "#FFF",
-        lighterGrey: "#AAA",
+        lighterGrey: "#333",
         offWhite: "#FDFDFD",
       });
       setDarkMode(false);
