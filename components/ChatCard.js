@@ -345,6 +345,7 @@ class ChatCard extends Component {
                   if (item.user_id != this.props.creator_id) {
                     return (
                       <ContactCard
+                        show={true}
                         email={item.email}
                         family_name={item.last_name}
                         given_name={item.first_name}
@@ -364,7 +365,14 @@ class ChatCard extends Component {
 
             <View style={{ width: "100%", flexDirection: "row", gap: 10 }}>
               <TextInput
-                style={[globalStyle.searchBar, { flex: 9 }]}
+                style={[
+                  globalStyle.searchBar,
+                  {
+                    flex: 9,
+                    backgroundColor: this.context.colour.white,
+                    color: this.context.colour.lighterGrey,
+                  },
+                ]}
                 placeholder="Enter Message..."
                 onChangeText={(text) => {
                   this.setState({ messageText: text });
