@@ -22,6 +22,7 @@ class ContactCard extends Component {
       imageURI: "",
       contactAddedToChat: this.props.inChat,
       contactBlocked: this.props.contactBlocked,
+      show: this.props.show,
     };
   }
 
@@ -337,78 +338,88 @@ class ContactCard extends Component {
   };
   render() {
     return (
-      <View style={style.container}>
-        <View
-          style={{
-            width: 45,
-            height: 45,
-            borderRadius: 45,
-            margin: 5,
-          }}
-        >
-          <Image
-            source={{
-              uri: this.state.imageURI,
-            }}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-            }}
-          />
-        </View>
-        <View style={style.subContainer}>
-          <View style={{ flexDirection: "column", flex: 10 }}>
-            <Text style={[style.title, style.textGeneral]}>
-              {this.props.given_name + " " + this.props.family_name}
-            </Text>
-            <Text style={[style.email, style.textGeneral]}>
-              {this.props.email}
-            </Text>
-          </View>
-          <TouchableOpacity style={style.button} onPress={this.handleAdd}>
-            {!this.props.chat_id ? (
-              this.state.contactAdded ? (
-                <Ionicons
-                  name="person-remove-outline"
-                  color={colours.black}
-                  size={24}
-                />
-              ) : (
-                <Ionicons
-                  name="person-add-outline"
-                  color={colours.black}
-                  size={24}
-                />
-              )
-            ) : !this.state.contactAddedToChat ? (
-              <Ionicons
-                name="add-circle-outline"
-                color={colours.black}
-                size={24}
+      <View style={{ width: "100%" }}>
+        {this.state.show && (
+          <View style={style.container}>
+            <View
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 45,
+                margin: 5,
+              }}
+            >
+              <Image
+                source={{
+                  uri: this.state.imageURI,
+                }}
+                style={{
+                  height: 45,
+                  width: 45,
+                  borderRadius: 45,
+                }}
               />
-            ) : (
-              <Ionicons
-                name="close-circle-outline"
-                color={colours.black}
-                size={24}
-              />
-            )}
-          </TouchableOpacity>
-          {!this.props.chat_id && (
-            <TouchableOpacity onPress={this.handleBlock}>
-              {!this.state.contactBlocked ? (
-                <Ionicons
-                  name="eye-off-outline"
-                  color={colours.black}
-                  size={24}
-                />
-              ) : (
-                <Ionicons name="eye-outline" color={colours.black} size={24} />
+            </View>
+            <View style={style.subContainer}>
+              <View style={{ flexDirection: "column", flex: 10 }}>
+                <Text style={[style.title, style.textGeneral]}>
+                  {this.props.given_name + " " + this.props.family_name}
+                </Text>
+                <Text style={[style.email, style.textGeneral]}>
+                  {this.props.email}
+                </Text>
+              </View>
+              {!this.props.contactBlocked && (
+                <TouchableOpacity style={style.button} onPress={this.handleAdd}>
+                  {!this.props.chat_id ? (
+                    this.state.contactAdded ? (
+                      <Ionicons
+                        name="person-remove-outline"
+                        color={colours.black}
+                        size={24}
+                      />
+                    ) : (
+                      <Ionicons
+                        name="person-add-outline"
+                        color={colours.black}
+                        size={24}
+                      />
+                    )
+                  ) : !this.state.contactAddedToChat ? (
+                    <Ionicons
+                      name="add-circle-outline"
+                      color={colours.black}
+                      size={24}
+                    />
+                  ) : (
+                    <Ionicons
+                      name="close-circle-outline"
+                      color={colours.black}
+                      size={24}
+                    />
+                  )}
+                </TouchableOpacity>
               )}
-            </TouchableOpacity>
-          )}
-        </View>
+              {!this.props.chat_id && (
+                <TouchableOpacity onPress={this.handleBlock}>
+                  {!this.state.contactBlocked ? (
+                    <Ionicons
+                      name="eye-off-outline"
+                      color={colours.black}
+                      size={24}
+                    />
+                  ) : (
+                    <Ionicons
+                      name="eye-outline"
+                      color={colours.black}
+                      size={24}
+                    />
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        )}
       </View>
     );
   }

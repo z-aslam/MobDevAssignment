@@ -38,18 +38,16 @@ function LogoTitle() {
 function BottomNav() {
   return (
     <Tab.Navigator
-      initialRouteName="Chats"
+      initialRouteName="Search"
       screenOptions={({ route }) => ({
         tabBarStyle: {
           backgroundColor: colours.offWhite,
           height: 60,
-          padding: 10,
           borderTopWidth: 0,
         },
         headerStyle: {
           backgroundColor: colours.offWhite,
-          height: 90,
-          padding: 10,
+          height: 85,
           borderBottomWidth: 0,
         },
         tabBarIcon: ({ focused, color, size }) => {

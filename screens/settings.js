@@ -29,8 +29,7 @@ class Settings extends Component {
             }}
           >
             <Text style={styles.buttonText} numberOfLines={1}>
-              {" "}
-              Update Information{" "}
+              Update Information
             </Text>
           </TouchableOpacity>
 
@@ -41,8 +40,7 @@ class Settings extends Component {
             }}
           >
             <Text style={styles.buttonText} numberOfLines={1}>
-              {" "}
-              View Blocked Users{" "}
+              View Blocked Users
             </Text>
           </TouchableOpacity>
 
@@ -53,7 +51,6 @@ class Settings extends Component {
             }}
           >
             <Text style={styles.buttonText} numberOfLines={1}>
-              {" "}
               Log Out
             </Text>
           </TouchableOpacity>

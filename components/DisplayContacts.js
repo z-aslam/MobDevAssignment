@@ -27,6 +27,7 @@ class DisplayContactChild extends Component {
   showBlock = () => {
     this.getContacts(!this.state.blocked);
     this.setState({ blocked: !this.state.blocked });
+    this.forceUpdate();
   };
 
   getContacts = (blocked) => {
@@ -143,6 +144,7 @@ class DisplayContactChild extends Component {
           renderItem={({ item }) => {
             return (
               <ContextContactCard
+                show={true}
                 email={item.email}
                 family_name={item.last_name}
                 given_name={item.first_name}
