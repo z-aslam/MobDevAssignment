@@ -2,7 +2,6 @@ import React, { Component, createRef } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { UserContext } from "../UserContext";
 import globalStyle from "../styles/globalStyle";
-import { colours } from "../styles/colours";
 import * as ImagePicker from "expo-image-picker";
 import styles from "../styles/globalStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -146,7 +145,7 @@ class UserPage extends Component {
       <View
         style={[
           globalStyle.pageContainer,
-          { backgroundColor: colours.offWhite },
+          { backgroundColor: this.context.colour.offWhite },
         ]}
       >
         {!this.state.takingPhoto ? (
@@ -180,13 +179,21 @@ class UserPage extends Component {
           </View>
         )}
         <Text
-          style={{ fontSize: 35, fontWeight: "bold", color: colours.black }}
+          style={{
+            fontSize: 35,
+            fontWeight: "bold",
+            color: this.context.colour.black,
+          }}
         >
           Hello {this.state.userData.first_name}!
         </Text>
 
         <Text
-          style={{ fontSize: 25, fontStyle: "italic", color: colours.black }}
+          style={{
+            fontSize: 25,
+            fontStyle: "italic",
+            color: this.context.colour.black,
+          }}
         >
           {this.state.userData.email}
         </Text>
@@ -226,16 +233,16 @@ class UserPage extends Component {
             Take Photo
           </Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={styles.mainAppButton}
           onPress={() => {
-            this.context.updateDarkMode();
+            this.context.updateColour();
           }}
         >
           <Text style={styles.buttonText} numberOfLines={1}>
             Toggle Dark Mode
           </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     );
   }

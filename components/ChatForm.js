@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from "react-native";
 import styles from "../styles/globalStyle";
-import { colours } from "../styles/colours";
 import { UserContext } from "../UserContext";
 import ContextChatCard from "./ChatCard";
 import globalStyle from "../styles/globalStyle";
@@ -106,7 +105,12 @@ class ChatFormChild extends Component {
 
   render() {
     return (
-      <View style={styles.pageContainer}>
+      <View
+        style={[
+          styles.pageContainer,
+          { backgroundColor: this.context.colour.offWhite },
+        ]}
+      >
         <Text
           style={{
             width: "90%",
@@ -114,7 +118,7 @@ class ChatFormChild extends Component {
             fontSize: 30,
             fontWeight: "bold",
             flex: 1,
-            color: colours.black,
+            color: this.context.colour.black,
           }}
         >
           Your Chats
@@ -143,7 +147,14 @@ class ChatFormChild extends Component {
           }}
         >
           <TextInput
-            style={[globalStyle.searchBar, { flex: 9 }]}
+            style={[
+              globalStyle.searchBar,
+              {
+                flex: 9,
+                backgroundColor: this.context.colour.white,
+                color: this.context.colour.lighterGrey,
+              },
+            ]}
             placeholder="Create Chat... "
             onChangeText={(text) => {
               this.setState({
@@ -165,7 +176,7 @@ class ChatFormChild extends Component {
             <Ionicons
               name="add-circle-outline"
               size={35}
-              color={colours.black}
+              color={this.context.colour.black}
             />
           </TouchableOpacity>
         </View>

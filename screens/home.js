@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import styles from "../styles/globalStyle";
 import { UserContext } from "../UserContext";
-import { colours } from "../styles/colours";
 
 class Home extends Component {
   static contextType = UserContext;
@@ -19,7 +18,12 @@ class Home extends Component {
 
   render() {
     return (
-      <View style={[styles.container, { backgroundColor: colours.offWhite }]}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: this.context.colour.offWhite },
+        ]}
+      >
         <TouchableOpacity
           onPress={() => {
             this.handleLogout();

@@ -5,7 +5,6 @@ import globalStyle from "../styles/globalStyle";
 import { UserContext } from "../UserContext";
 import ContactCard from "./ContactCard";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colours } from "../styles/colours";
 
 class SearchContacts extends Component {
   static contextType = UserContext;
@@ -68,12 +67,25 @@ class SearchContacts extends Component {
 
   render() {
     return (
-      <View style={globalStyle.pageContainer}>
+      <View
+        style={[
+          globalStyle.pageContainer,
+          { backgroundColor: this.context.colour.offWhite },
+        ]}
+      >
         <View
           style={{ width: "100%", flexDirection: "row", alignItems: "center" }}
         >
           <TextInput
-            style={[globalStyle.searchBar, { flex: 9, marginTop: 10 }]}
+            style={[
+              globalStyle.searchBar,
+              {
+                flex: 9,
+                marginTop: 10,
+                backgroundColor: this.context.colour.white,
+                color: this.context.colour.lighterGrey,
+              },
+            ]}
             placeholder="Search Contacts..."
             onChangeText={(text) => {
               this.setState({ text: text, page: 0 });
@@ -117,7 +129,11 @@ class SearchContacts extends Component {
             <Ionicons
               name="chevron-back-outline"
               size={30}
-              color={this.state.page > 0 ? colours.black : colours.lighterGrey}
+              color={
+                this.state.page > 0
+                  ? this.context.colour.black
+                  : this.context.colour.lighterGrey
+              }
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -131,6 +147,7 @@ class SearchContacts extends Component {
             <Text
               style={{
                 fontSize: 25,
+                color: this.context.colour.black,
               }}
             >
               {this.state.page}
@@ -152,8 +169,8 @@ class SearchContacts extends Component {
               size={30}
               color={
                 this.state.contacts.length > 3
-                  ? colours.black
-                  : colours.lighterGrey
+                  ? this.context.colour.black
+                  : this.context.colour.lighterGrey
               }
             />
           </TouchableOpacity>

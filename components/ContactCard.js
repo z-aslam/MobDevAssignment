@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { UserContext } from "../UserContext";
 import { StyleSheet } from "react-native";
-import { colours } from "../styles/colours";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useToast } from "react-native-toast-notifications";
 
@@ -340,7 +339,12 @@ class ContactCard extends Component {
     return (
       <View style={{ width: "100%" }}>
         {this.state.show && (
-          <View style={style.container}>
+          <View
+            style={[
+              style.container,
+              { backgroundColor: this.context.colour.white },
+            ]}
+          >
             <View
               style={{
                 width: 45,
@@ -362,10 +366,14 @@ class ContactCard extends Component {
             </View>
             <View style={style.subContainer}>
               <View style={{ flexDirection: "column", flex: 10 }}>
-                <Text style={[style.title, style.textGeneral]}>
+                <Text
+                  style={[style.title, { color: this.context.colour.black }]}
+                >
                   {this.props.given_name + " " + this.props.family_name}
                 </Text>
-                <Text style={[style.email, style.textGeneral]}>
+                <Text
+                  style={[style.email, { color: this.context.colour.black }]}
+                >
                   {this.props.email}
                 </Text>
               </View>
@@ -375,26 +383,26 @@ class ContactCard extends Component {
                     this.state.contactAdded ? (
                       <Ionicons
                         name="person-remove-outline"
-                        color={colours.black}
+                        color={this.context.colour.black}
                         size={24}
                       />
                     ) : (
                       <Ionicons
                         name="person-add-outline"
-                        color={colours.black}
+                        color={this.context.colour.black}
                         size={24}
                       />
                     )
                   ) : !this.state.contactAddedToChat ? (
                     <Ionicons
                       name="add-circle-outline"
-                      color={colours.black}
+                      color={this.context.colour.black}
                       size={24}
                     />
                   ) : (
                     <Ionicons
                       name="close-circle-outline"
-                      color={colours.black}
+                      color={this.context.colour.black}
                       size={24}
                     />
                   )}
@@ -405,13 +413,13 @@ class ContactCard extends Component {
                   {!this.state.contactBlocked ? (
                     <Ionicons
                       name="eye-off-outline"
-                      color={colours.black}
+                      color={this.context.colour.black}
                       size={24}
                     />
                   ) : (
                     <Ionicons
                       name="eye-outline"
-                      color={colours.black}
+                      color={this.context.colour.black}
                       size={24}
                     />
                   )}
@@ -444,11 +452,10 @@ const style = StyleSheet.create({
     width: "75%",
   },
   container: {
-    backgroundColor: colours.white,
     width: "100%",
     padding: 10,
     borderRadius: 10,
-    shadowColor: colours.black,
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -459,9 +466,6 @@ const style = StyleSheet.create({
     elevation: 5,
     gap: 10,
     flexDirection: "row",
-  },
-  textGeneral: {
-    color: colours.black,
   },
   title: {
     fontSize: 20,

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { updateColour } from "./styles/colours";
 
 export const UserContext = React.createContext();
 
@@ -14,11 +13,43 @@ export const UserProvider = ({ children }) => {
     userID: null,
   });
 
+  const [colour, setColour] = useState({
+    green: "#5b1",
+    darkGreen: "#4a2",
+    lightGrey: "#777",
+    black: "#fdfdfd",
+    white: "#303134",
+    lighterGrey: "#AAA",
+    offWhite: "#202124",
+    error: "#FF0000",
+  });
+
   const [darkMode, setDarkMode] = useState(true);
 
-  const updateDarkMode = () => {
-    updateColour(!darkMode);
-    setDarkMode(!darkMode);
+  const updateColour = () => {
+    if (darkMode) {
+      setColour({
+        green: "#5b1",
+        darkGreen: "#4a2",
+        lightGrey: "#777",
+        black: "#000",
+        white: "#FFF",
+        lighterGrey: "#AAA",
+        offWhite: "#FDFDFD",
+      });
+      setDarkMode(false);
+    } else {
+      setColour({
+        green: "#5b1",
+        darkGreen: "#4a2",
+        lightGrey: "#777",
+        black: "#fdfdfd",
+        white: "#303134",
+        lighterGrey: "#AAA",
+        offWhite: "#202124",
+      });
+      setDarkMode(true);
+    }
   };
 
   const updateData = () => {
@@ -38,7 +69,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ UserData, updateData, darkMode, updateDarkMode }}
+      value={{ UserData, updateData, colour, updateColour }}
     >
       {children}
     </UserContext.Provider>

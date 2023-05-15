@@ -5,15 +5,23 @@ import Contacts from "../screens/contacts";
 import Chats from "../screens/chats";
 import Search from "../screens/search";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colours } from "../styles/colours";
 import User from "../screens/user";
 import styles from "../styles/globalStyle";
+import { useUser } from "../UserContext";
 
 const Tab = createBottomTabNavigator();
 
 function LogoTitle() {
+  const { colour } = useUser();
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 7 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 7,
+        backgroundColor: colour.offWhite,
+      }}
+    >
       <Image
         style={{
           width: 55,
@@ -36,17 +44,19 @@ function LogoTitle() {
 }
 
 function BottomNav() {
+  const { colour } = useUser();
+
   return (
     <Tab.Navigator
-      initialRouteName="Search"
+      initialRouteName="You"
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          backgroundColor: colours.offWhite,
+          backgroundColor: colour.offWhite,
           height: 60,
           borderTopWidth: 0,
         },
         headerStyle: {
-          backgroundColor: colours.offWhite,
+          backgroundColor: colour.offWhite,
           height: 85,
           borderBottomWidth: 0,
         },
@@ -75,8 +85,8 @@ function BottomNav() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: colours.green,
-        tabBarInactiveTintColor: colours.lightGrey,
+        tabBarActiveTintColor: colour.green,
+        tabBarInactiveTintColor: colour.lightGrey,
       })}
     >
       <Tab.Screen

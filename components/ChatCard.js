@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { UserContext } from "../UserContext";
 import { StyleSheet } from "react-native";
-import { colours } from "../styles/colours";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import globalStyle from "../styles/globalStyle";
 import MessageBubble from "./MessageBubble";
@@ -214,18 +213,26 @@ class ChatCard extends Component {
   }
   render() {
     return (
-      <View style={[style.container]}>
+      <View
+        style={[
+          style.container,
+          {
+            backgroundColor: this.context.colour.white,
+            color: this.context.colour.black,
+          },
+        ]}
+      >
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
             width: "100%",
             gap: 10,
+            color: this.context.colour.black,
           }}
         >
           <TouchableOpacity
             style={{
-              backgroundColor: colours.white,
               width: 45,
               height: 45,
               borderRadius: 45,
@@ -239,12 +246,16 @@ class ChatCard extends Component {
             <Ionicons
               name="chatbubbles-outline"
               size={40}
-              color={colours.green}
+              color={this.context.colour.green}
             />
           </TouchableOpacity>
           <View style={{ width: "70%", marginVertical: 10, gap: 5, flex: 8 }}>
             <TextInput
-              style={{ fontWeight: "bold", fontSize: 17, color: colours.black }}
+              style={{
+                fontWeight: "bold",
+                fontSize: 17,
+                color: this.context.colour.black,
+              }}
               defaultValue={this.props.name}
               onChangeText={(v) => {
                 this.setState({ titleText: v });
@@ -256,7 +267,7 @@ class ChatCard extends Component {
               style={{
                 fontSize: 15,
                 fontStyle: "italic",
-                color: colours.black,
+                color: this.context.colour.black,
               }}
             >
               {this.state.members.length < 4
@@ -276,7 +287,7 @@ class ChatCard extends Component {
             }}
           >
             <Ionicons
-              color={colours.black}
+              color={this.context.colour.black}
               name={
                 this.state.chatOpened
                   ? "caret-up-outline"
@@ -366,7 +377,7 @@ class ChatCard extends Component {
                 }}
               >
                 <Ionicons
-                  color={colours.black}
+                  color={this.context.colour.black}
                   name="checkmark-outline"
                   size={30}
                 />
@@ -384,7 +395,7 @@ class ChatCard extends Component {
                 }}
               >
                 <Ionicons
-                  color={colours.black}
+                  color={this.context.colour.black}
                   name={
                     !this.state.addContact
                       ? "people-circle-outline"
@@ -413,7 +424,6 @@ const containsObject = (userID, list) => {
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: colours.white,
     width: "100%",
     padding: 5,
     borderRadius: 10,
@@ -428,7 +438,6 @@ const style = StyleSheet.create({
     elevation: 5,
     flexDirection: "column",
     alignItems: "center",
-    color: colours.black,
   },
 });
 

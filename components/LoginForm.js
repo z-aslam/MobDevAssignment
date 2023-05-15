@@ -51,7 +51,7 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container]}>
         <BigLogo />
 
         <Text style={styles.secondaryTitleText}> Login </Text>
